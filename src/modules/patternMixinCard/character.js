@@ -52,7 +52,8 @@ export const character = {
         this.hp = Math.max(0, this.hp - damage);
         this.hpDisplay.updateText(this.hp.toString());
         if (this.hp <= 0) {
-            console.log(this.name + ' is defeated!');
+            console.log('gameover!');
+            this.scene.gameManager.gameOver();
         }
     },
     /**

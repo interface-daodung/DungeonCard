@@ -5,7 +5,7 @@ import Card from '../../../modules/Card.js';
 
 export default class HilichurlFighter extends Card {
     static DEFAULT = {
-        id: 'hilichurl-fighter',
+        id: 'fighter',
         name: 'Hilichurl Fighter',
         element: 'physical',
         type: 'enemy',

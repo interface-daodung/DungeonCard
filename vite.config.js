@@ -9,5 +9,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets'
-  }
+  },
+  publicDir: 'assets' // Copy thư mục assets vào build
 })

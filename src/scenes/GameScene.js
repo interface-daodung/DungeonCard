@@ -108,7 +108,7 @@ export default class GameScene extends Phaser.Scene {
 
   createDeck() {
     // Khởi tạo CardManager thông qua GameManager Tạo lưới 3x3
-    this.gameManager.getCardManager().initializeCreateDeck(this);
+    this.gameManager.cardManager.initializeCreateDeck(this);
   }
 
   useItem(itemName) {
