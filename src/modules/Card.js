@@ -1,6 +1,5 @@
 import Phaser from 'phaser';
 import { enemy } from './patternMixinCard/enemy.js';
-import { coin } from './patternMixinCard/coin.js';
 import { food } from './patternMixinCard/food.js';
 import { weapon } from './patternMixinCard/weapon.js';
 import { trap } from './patternMixinCard/trap.js';
@@ -25,8 +24,6 @@ export default class Card extends Phaser.GameObjects.Container {
         // Áp dụng mixin logic dựa trên type
         if (type === "enemy") {
             Object.assign(this, enemy);
-        } else if (type === "coin") {
-            Object.assign(this, coin);
         } else if (type === "food") {
             Object.assign(this, food);
         } else if (type === "weapon") {
@@ -142,8 +139,8 @@ export default class Card extends Phaser.GameObjects.Container {
 
         // Tạo background mờ - đặt trong container với gốc tọa độ tương đối
         const bg = this.scene.add.rectangle(-width / 2, -height / 2, width, height, 0x000000, 0.7)
-        .setOrigin(0, 0)
-        .setInteractive();
+            .setOrigin(0, 0)
+            .setInteractive();
 
         // Tạo background cho dialog - sử dụng màu chủ đạo của game với góc bo tròn
         const dialogBg = this.scene.add.graphics();

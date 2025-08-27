@@ -50,7 +50,7 @@ export const character = {
      */
     takeDamage(damage) {
         this.hp = Math.max(0, this.hp - damage);
-        this.hpDisplay.setText(this.hp.toString());
+        this.hpDisplay.updateText(this.hp.toString());
         if (this.hp <= 0) {
             console.log(this.name + ' is defeated!');
         }

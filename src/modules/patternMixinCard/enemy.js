@@ -8,7 +8,7 @@ export const enemy = {
         // Thêm hiển thị UI cho card
         this.hpDisplay = this.createDisplay({
             fillColor: 0xFF0000,
-            text: this.hp.toString()
+            text: this.health.toString()
         }, 'rightTop');
     },
     /**
@@ -29,6 +29,8 @@ export const enemy = {
     CardEffect() {
         console.log(this.name + ' đang chạy hiệu ứng...');
         // Logic khi card được kích hoạt (nếu có)
+        this.scene.gameManager.cardManager.CardCharacter.takeDamage(this.health);
+        this.scene.gameManager.addCoin(this.score);
         return false;
     }
 };

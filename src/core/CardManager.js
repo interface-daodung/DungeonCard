@@ -19,6 +19,8 @@ export default class CardManager {
         // Liên kết đến CardFactory singleton
         this.cardFactory = cardFactory;
         this.cardFactory.setCurrentStage(scene.stageId);
+
+        this.CardCharacter = null;
     }
 
     /**
@@ -83,7 +85,6 @@ export default class CardManager {
         return { x, y };
     }
 
-
     /**
      * Khởi tạo và tạo deck với 9 cards
      */
@@ -91,42 +92,22 @@ export default class CardManager {
         // Khởi tạo grid coordinates trước
         this.initializeGridCoordinates();
         // Tạo card nhân vật tại vị trí 4
-        const coord_4 = this.getGridPositionCoordinates(4);
-        const cardCharacter = this.cardFactory.createCharacter(this.scene, coord_4.x, coord_4.y, 4);
-        this.addCard(cardCharacter, 4);
-        console.log(`CardManager: Created character card at position (${coord_4.x}, ${coord_4.y})`);
+        const coord_start = this.getGridPositionCoordinates(4);
+        this.CardCharacter = this.cardFactory.createCharacter(this.scene, coord_start.x, coord_start.y, 4);
+        this.addCard(this.CardCharacter, 4);
 
         // Tạo 9 cards mới
         for (let i = 0; i < 9; i++) {
             const coords = this.getGridPositionCoordinates(i);
             if (coords) {
                 // Tạo card mới sử dụng CardFactory
-                if (i === 4) { continue; }
+                if (i === 4) continue;
+                // Tạo card ngẫu nhiên
                 const card = this.cardFactory.createRandomCard(this.scene, coords.x, coords.y, i);
                 // Thêm card vào vị trí grid
                 this.addCard(card, i);
-
-                console.log(`CardManager: Created random card ${i} at position (${coords.x}, ${coords.y})`);
             }
         }
-
-        console.log('CardManager: Deck initialized with 9 random cards');
-    }
-
-    /**
-     * Lấy index của card có type "character"
-     * @returns {number} Index của character card, -1 nếu không tìm thấy
-     */
-    getCharacterIndex() {
-        for (let i = 0; i < this.cards.length; i++) {
-            if (this.cards[i] && this.cards[i].type === 'character') {
-                //console.log(`CardManager: Tìm thấy character card tại index ${i}`);
-                return i;
-            }
-        }
-
-        console.warn('CardManager: Không tìm thấy character card');
-        return -1;
     }
 
     /**
@@ -160,7 +141,6 @@ export default class CardManager {
         return true;
     }
 
-
     /**
      * Disable tất cả card để tránh nhận sự kiện khi đang di chuyển
      */
@@ -187,5 +167,21 @@ export default class CardManager {
             }
         });
         //console.log('CardManager: Enabled all cards');
+    }
+
+    /**
+     * Lấy index của card có type "character"
+     * @returns {number} Index của character card, -1 nếu không tìm thấy
+     */
+    getCharacterIndex() {
+        for (let i = 0; i < this.cards.length; i++) {
+            if (this.cards[i] && this.cards[i].type === 'character') {
+                //console.log(`CardManager: Tìm thấy character card tại index ${i}`);
+                return i;
+            }
+        }
+
+        console.warn('CardManager: Không tìm thấy character card');
+        return -1;
     }
 }
