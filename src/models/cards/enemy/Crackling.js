@@ -25,7 +25,8 @@ export default class Crackling extends Card {
         this.rarity = Crackling.DEFAULT.rarity;
 
         this.health = this.GetRandom(3, 10); // Máu từ 12-20 (yếu hơn fighter)
-
+        this.score = this.GetRandom(1, 9);
+        
         // Tạo card và thêm vào scene
         this.createCard();
         scene.add.existing(this);

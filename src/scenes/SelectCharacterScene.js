@@ -12,10 +12,18 @@ export default class SelectCharacterScene extends Phaser.Scene {
 
     // Khởi tạo currentCardIndex với logic thông minh
     this.currentCardIndex = this.initializeCurrentCardIndex();
+
+
   }
 
-  preload() {
-    // Assets đã được load bởi LoadingScene
+  init() {
+    this.HighScores = localStorage.getItem('characterHighScores');
+    if (!this.HighScores) {
+      this.HighScores = {};
+    } else {
+      this.HighScores = JSON.parse(this.HighScores);
+    }
+    console.log(this.HighScores);
   }
 
   create() {
@@ -66,6 +74,14 @@ export default class SelectCharacterScene extends Phaser.Scene {
       fontFamily: 'Arial, sans-serif',
       fontWeight: 'bold'
     }).setOrigin(0.5);
+
+    // Thông tin thẻ
+    this.cardHighScoreText = this.add.text(width * 0.5, height * 0.202, '', {
+      fontSize: '16px',
+      fill: '#ffffff',
+      fontFamily: 'Arial, sans-serif',
+      fontWeight: 'bold'
+    }).setAlpha(0.5).setOrigin(0.5);
 
     this.cardLevelText = this.add.text(width * 0.82, height * 0.18, 'level 1', {
       fontSize: '20px',
@@ -219,7 +235,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
     const currentCard = this.cards[this.currentCardIndex];
 
     // Load level từ localStorage
-    let CharacterLevel = localStorage.getItem('CharacterLevel');
+    let CharacterLevel = localStorage.getItem('characterLevel');
     if (CharacterLevel) {
       try {
         CharacterLevel = JSON.parse(CharacterLevel);
@@ -242,6 +258,11 @@ export default class SelectCharacterScene extends Phaser.Scene {
     this.cardDescriptionText.setText(currentCard.description);
     this.cardHPText.setText(`❤️ ${currentCard.hp + currentCard.level - 1}`);
     this.cardLevelText.setText(`level ${currentCard.level}`);
+    if (this.HighScores[currentCard.id]) {
+      this.cardHighScoreText.setText(`High Score: ${this.HighScores[currentCard.id]}`);
+    } else {
+      this.cardHighScoreText.setText('');
+    }
 
 
     // Hiển thị level hoặc MAX
@@ -261,7 +282,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
       this.currentCardContainer.remove(this.currentCardImage, true);
       this.currentCardImage = SpritesheetCharacter.create(this, 0, 0, currentCard.id + '-sprite', 300, 514);
       this.currentCardContainer.add(this.currentCardImage);
-      
+
       // Thay đổi style viền thành màu vàng
       this.cardBorder.clear();
       this.cardBorder.lineStyle(4, 0xdcc06f, 1);
@@ -274,7 +295,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
       this.currentCardImage = this.add.image(0, 0, currentCard.id);
       this.currentCardImage.setDisplaySize(300, 514);
       this.currentCardContainer.add(this.currentCardImage);
-      
+
       // Thay đổi style viền thành màu trắng
       this.cardBorder.clear();
       this.cardBorder.lineStyle(4, 0xffffff, 1);
@@ -323,7 +344,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
     }
 
     // Lấy CharacterLevel từ localStorage
-    let CharacterLevel = localStorage.getItem('CharacterLevel');
+    let CharacterLevel = localStorage.getItem('characterLevel');
 
     // Nếu chưa có, tạo object mới
     if (!CharacterLevel) {
@@ -343,7 +364,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
     CharacterLevel[currentCard.id] = currentCard.level;
 
     // Lưu vào localStorage
-    localStorage.setItem('CharacterLevel', JSON.stringify(CharacterLevel));
+    localStorage.setItem('characterLevel', JSON.stringify(CharacterLevel));
 
     // Cập nhật hiển thị
     this.updateCardDisplay();

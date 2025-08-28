@@ -29,8 +29,9 @@ export const enemy = {
     CardEffect() {
         console.log(this.name + ' đang chạy hiệu ứng...');
         // Logic khi card được kích hoạt (nếu có)
-        this.scene.gameManager.cardManager.CardCharacter.takeDamage(this.health);
         this.scene.gameManager.addCoin(this.score);
-        return false;
+        // return true;
+        return this.scene.gameManager.cardManager.CardCharacter.takeDamage(this.health);
+
     }
 };

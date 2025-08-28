@@ -52,9 +52,10 @@ export const character = {
         this.hp = Math.max(0, this.hp - damage);
         this.hpDisplay.updateText(this.hp.toString());
         if (this.hp <= 0) {
-            console.log('gameover!');
             this.scene.gameManager.gameOver();
+            return true;
         }
+        return false;
     },
     /**
      * Hồi phục HP
@@ -76,7 +77,7 @@ export const character = {
      */
     getLevel() {
         // Load level từ localStorage
-        const CharacterLevel = localStorage.getItem('CharacterLevel');
+        const CharacterLevel = localStorage.getItem('characterLevel');
         if (CharacterLevel) {
             return JSON.parse(CharacterLevel)[this.nameId] || 1;
         }

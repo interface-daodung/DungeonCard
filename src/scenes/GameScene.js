@@ -17,11 +17,6 @@ export default class GameScene extends Phaser.Scene {
     this.gameManager = new GameManager(this);
   }
 
-  preload() {
-    // KHÔNG CẦN preload gì nữa!
-    // Assets đã được load bởi LoadingScene
-  }
-
   create() {
     // Lấy kích thước game
     const { width, height } = this.scale;

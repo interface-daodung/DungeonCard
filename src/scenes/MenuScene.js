@@ -208,7 +208,7 @@ export default class MenuScene extends Phaser.Scene {
                     this.cards[(selectedIndex + 1) % this.cards.length].id];
                     
                     // Lấy CharacterLevel từ localStorage
-                    let characterLevels = localStorage.getItem('CharacterLevel');
+                    let characterLevels = localStorage.getItem('characterLevel');
                     if (characterLevels !== null) {
                         try {
                             const levelData = JSON.parse(characterLevels);

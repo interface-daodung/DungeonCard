@@ -100,14 +100,13 @@ export default class AssetManager {
                     frameWidth: 350,
                     frameHeight: 590
                 });
-                console.log(`AssetManager: Đã load sprite sheet ${key} từ ${path}`);
             } else {
                 // Nếu không có đuôi "sprite" thì load như image bình thường
                 this.scene.load.image(key, path);
-                console.log(`AssetManager: Đã load image ${key} từ ${path}`);
+                // console.log(`AssetManager: Đã load image ${key} từ ${path}`);
             }
         } else {
-            console.log(`AssetManager: ${key} đã tồn tại`);
+            // console.log(`AssetManager: ${key} đã tồn tại`);
         }
     }
 
@@ -126,7 +125,7 @@ export default class AssetManager {
     loadAudio(key, path) {
         if (!this.scene.cache.audio.exists(key)) {
             this.scene.load.audio(key, path);
-            console.log(`AssetManager: Đã load audio ${key} từ ${path}`);
+            // console.log(`AssetManager: Đã load audio ${key} từ ${path}`);
         }
     }
 

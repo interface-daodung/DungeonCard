@@ -364,6 +364,13 @@ export default class Card extends Phaser.GameObjects.Container {
      * @param {Function} onComplete - Callback khi hiệu ứng chết hoàn thành
      */
     ProgressDestroy() {
+        // Kiểm tra scene còn hợp lệ không
+        if (!this.scene || !this.scene.tweens) {
+            console.warn(`Card ${this.name || this.nameId}: Scene or tweens not available, destroying directly`);
+            this.destroy();
+            return;
+        }
+
         // Tạo hiệu ứng fade out
         this.scene.tweens.add({
             targets: this,
