@@ -1,14 +1,21 @@
 import { defineConfig } from 'vite'
 
 export default defineConfig({
-  base: './', // Đảm bảo đường dẫn tương đối cho GitHub Pages
+  // 👇 bắt buộc phải có, trùng với tên repo
+  base: '/DungeonCard/',
+
   server: {
     port: 3000,
     open: true
   },
+
   build: {
     outDir: 'dist',
     assetsDir: 'assets'
   },
-  publicDir: 'assets' // Copy thư mục assets vào build
+
+  // Giữ mặc định, không override publicDir = 'assets'
+  // Nếu có file tĩnh (ảnh, icon, json...) thì để vào thư mục "public/"
+  // Vite sẽ copy nguyên trạng vào dist
+  publicDir: 'public'
 })
