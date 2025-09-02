@@ -104,15 +104,14 @@ export default class Character extends Card {
      */
     setWeapon(weapon) {
         console.log('weapon---------', weapon);
-        if(weapon.durability > this.weapon?.durability){
+        if (weapon.durability > (this.weapon?.durability ?? 0)) {
             this.weapon = weapon;
-        this.weaponDisplay.updateText(this.weapon.durability);
-        this.weaponBadgeDisplay.updateTexture(this.weapon.default.id + '-badge');
-        this.scene.sellButton.updateButton();
+            this.weaponDisplay.updateText(this.weapon.durability);
+            this.weaponBadgeDisplay.updateTexture(this.weapon.default.id + '-badge');
+            this.scene.sellButton.updateButton();
         } else {
             this.scene.gameManager.addCoin(weapon.durability);
         }
-      
     }
     /**
      * Tạo display badge

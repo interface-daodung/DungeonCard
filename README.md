@@ -2,7 +2,7 @@
 
 Một game card-based dungeon crawler được xây dựng với **Phaser.js 3.70** và **ES6**, sử dụng **Vite** làm build tool.
 
-**🎮 Phiên bản hiện tại:** `4.1.0`
+**🎮 Phiên bản hiện tại:** `4.2.0`
 
 ## 🌐 Live Demo
 
@@ -18,6 +18,7 @@ Một game card-based dungeon crawler được xây dựng với **Phaser.js 3.7
 - **Sprite Sheet Optimization**: Tối ưu hóa tài nguyên với sprite sheet tự động
 - **Advanced Asset Management**: Quản lý tài nguyên hiệu quả với AssetManager
 - **Animation System**: Hệ thống animation mạnh mẽ với AnimationManager
+- **Weapon Trading System**: Hệ thống bán vũ khí thông minh với giá trị dựa trên độ bền
 
 ## 🚀 Cài đặt và chạy
 
@@ -113,6 +114,7 @@ DungeonCard/
 │   │   ├── CardFactory.js  # Card creation factory
 │   │   ├── Item.js         # Item system
 │   │   └── typeCard/       # Card type implementations
+│   │       └── character.js # Character card với weapon trading system
 │   ├── scenes/             # Game scenes
 │   │   ├── LoadingScene.js # Loading screen
 │   │   ├── MenuScene.js    # Main menu
@@ -120,7 +122,7 @@ DungeonCard/
 │   │   ├── EquipScene.js   # Equipment management
 │   │   ├── LibraryScene.js # Card library
 │   │   ├── MapScenes.js    # Map navigation
-│   │   ├── GameScene.js    # Main gameplay
+│   │   ├── GameScene.js    # Main gameplay với weapon trading UI
 │   │   └── TestGraphicsRenderTexture.js # Testing scene
 │   ├── data/               # Game data
 │   │   ├── atlas/          # Sprite sheet metadata
@@ -170,6 +172,11 @@ DungeonCard/
    - 🔮 **Magic**: Hiệu ứng đặc biệt
    - 💚 **Heal**: Hồi máu
    - 🎯 **Special**: Kỹ năng đặc biệt
+8. **Weapon Trading**:
+   - 🪙 **Sell Weapon**: Bán vũ khí để nhận tiền dựa trên độ bền
+   - Nút bán vũ khí xuất hiện khi có vũ khí với độ bền > 0
+   - Giá trị bán = độ bền hiện tại của vũ khí
+   - Vũ khí mới chỉ được nhận nếu có độ bền cao hơn vũ khí hiện tại
 
 ## 🛠️ Công nghệ sử dụng
 
@@ -193,6 +200,16 @@ DungeonCard/
 1. Tạo file scene trong `src/scenes/`
 2. Import vào `main.js`
 3. Thêm vào scene array
+
+### Weapon Trading System
+Hệ thống bán vũ khí được tích hợp trong:
+- **GameScene.js**: UI nút bán vũ khí với vị trí cố định
+- **Character.js**: Logic xử lý vũ khí và độ bền
+- **Cơ chế hoạt động**:
+  - Nút xuất hiện khi character có vũ khí với độ bền > 0
+  - Giá trị bán = độ bền hiện tại
+  - Vũ khí mới chỉ được nhận nếu có độ bền cao hơn
+  - Tự động ẩn/hiện nút dựa trên trạng thái vũ khí
 
 ### Tạo sprite sheet
 ```bash
@@ -241,6 +258,7 @@ Nếu có vấn đề hoặc câu hỏi, vui lòng tạo issue trên GitHub.
 
 ## 📊 Phiên bản
 
+ **v4.2.0**: Thêm Weapon Trading System, nút bán vũ khí thông minh với giá trị dựa trên độ bền
 - **v4.1.0**: Cải thiện sprite sheet system, thêm RexUI plugin, tối ưu hóa performance
 - **v4.0.0**: Refactor codebase, thêm advanced asset management
 - **v3.0.0**: Thêm turn-based combat system
