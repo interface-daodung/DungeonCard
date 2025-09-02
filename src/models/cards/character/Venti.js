@@ -1,9 +1,9 @@
 // Venti.js - Thẻ nhân vật Venti
 // Chức năng: Nhân vật người chơi điều khiển
 
-import Card from '../../../modules/Card.js';
+import Character from '../../../modules/typeCard/character.js';
 
-export default class Venti extends Card {
+export default class Venti extends Character {
 
     static DEFAULT = {
         id: 'venti',
@@ -17,11 +17,10 @@ export default class Venti extends Card {
         super(scene, x, y, index,
             Venti.DEFAULT.name, Venti.DEFAULT.id, "character");
 
-        this.level = this.getLevel();
-        this.hp = this.getMaxHP(); // HP ban đầu  
+    
         this.element = Venti.DEFAULT.element; // Element 
         this.description = Venti.DEFAULT.description; // Mô tả
-        this.weapon = null; // vũ khí
+       
 
         this.createCard();
         scene.add.existing(this);

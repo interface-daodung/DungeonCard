@@ -1,15 +1,16 @@
 // HydroSamachurl.js - Thẻ enemy Hilichurl Hydro Samachurl
 // Chức năng: Enemy caster thủy có thể tạo nước và gây wet effect
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class HydroSamachurl extends Card {
+export default class HydroSamachurl extends Enemy {
     static DEFAULT = {
         id: 'hydro-samachurl',
         name: 'Hydro Samachurl',
         element: 'hydro',
         type: 'enemy',
         description: 'Hydro Samachurl - Kẻ địch caster thủy có thể tạo nước và gây wet effect.',
+        clan: 'hilichurl',
         rarity: 3
     }
     constructor(scene, x, y, index) {

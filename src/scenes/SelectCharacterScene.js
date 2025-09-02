@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GradientText } from '../utils/GradientText.js';
 import { HeaderUI } from '../utils/HeaderUI.js';
 import cardCharacterList from '../data/cardCharacterList.json';
-import { SpritesheetCharacter } from '../utils/SpritesheetCharacter.js';
+import { SpritesheetWrapper } from '../utils/SpritesheetWrapper.js';
 
 export default class SelectCharacterScene extends Phaser.Scene {
   constructor() {
@@ -12,8 +12,6 @@ export default class SelectCharacterScene extends Phaser.Scene {
 
     // Khởi tạo currentCardIndex với logic thông minh
     this.currentCardIndex = this.initializeCurrentCardIndex();
-
-
   }
 
   init() {
@@ -32,11 +30,6 @@ export default class SelectCharacterScene extends Phaser.Scene {
     // Background
     const background = this.add.image(width / 2, height / 2, 'background');
     background.setDisplaySize(width, height);
-
-    // Nếu không có background image, tạo background mặc định
-    if (!this.textures.exists('background')) {
-      this.add.rectangle(width / 2, height / 2, width, height, 0x2c3e50);
-    }
 
     this.headerUI = HeaderUI.createHeaderUI(this, width, height);
 
@@ -90,7 +83,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
       fontWeight: 'bold'
     }).setOrigin(0.5);
 
-    this.cardElementImage = this.add.image(width * 0.1 + 32, height * 0.15 + 32, 'element-cryo');
+    this.cardElementImage = this.add.image(width * 0.1 + 32, height * 0.15 + 32, 'element', 'element-cryo');
     this.cardElementImage.setDisplaySize(32, 32);
 
     this.cardDescriptionText = this.add.text(width * 0.5, height * 0.26, '', {
@@ -150,7 +143,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
     this.currentCardContainer = this.add.container(width / 2, height * 0.65);
 
     // Thẻ hiện tại
-    this.currentCardImage = this.add.image(0, 0, 'eula');
+    this.currentCardImage = this.add.image(0, 0, 'character', 'eula');
     this.currentCardImage.setDisplaySize(300, 514); // Tỷ lệ 7:12
 
     // Viền thẻ - lưu reference để có thể thay đổi style sau này
@@ -254,7 +247,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
 
     // Cập nhật thông tin panel
     this.cardNameText.setText(currentCard.name);
-    this.cardElementImage.setTexture(`element-${currentCard.element.toLowerCase()}`);
+    this.cardElementImage.setTexture('element', `element-${currentCard.element.toLowerCase()}`);
     this.cardDescriptionText.setText(currentCard.description);
     this.cardHPText.setText(`❤️ ${currentCard.hp + currentCard.level - 1}`);
     this.cardLevelText.setText(`level ${currentCard.level}`);
@@ -280,7 +273,8 @@ export default class SelectCharacterScene extends Phaser.Scene {
     if (currentCard.level > 2) {
       // Nếu level > 2, sử dụng SpritesheetCharacter.create và style vàng
       this.currentCardContainer.remove(this.currentCardImage, true);
-      this.currentCardImage = SpritesheetCharacter.create(this, 0, 0, currentCard.id + '-sprite', 300, 514);
+      this.currentCardImage = SpritesheetWrapper.CharacterAnimation(this, 0, 0,
+        currentCard.id + '-sprite', 300, 514);
       this.currentCardContainer.add(this.currentCardImage);
 
       // Thay đổi style viền thành màu vàng
@@ -292,7 +286,7 @@ export default class SelectCharacterScene extends Phaser.Scene {
     } else {
       // Nếu level ≤ 2, sử dụng image thường và style trắng
       this.currentCardContainer.remove(this.currentCardImage, true);
-      this.currentCardImage = this.add.image(0, 0, currentCard.id);
+      this.currentCardImage = this.add.image(0, 0, 'character', currentCard.id);
       this.currentCardImage.setDisplaySize(300, 514);
       this.currentCardContainer.add(this.currentCardImage);
 

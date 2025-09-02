@@ -1,9 +1,9 @@
 // Furina.js - Thẻ nhân vật Furina
 // Chức năng: Nhân vật người chơi điều khiển
 
-import Card from '../../../modules/Card.js';
+import Character from '../../../modules/typeCard/character.js';
 
-export default class Furina extends Card {
+export default class Furina extends Character {
 
     static DEFAULT = {
         id: 'furina',
@@ -16,12 +16,10 @@ export default class Furina extends Card {
     constructor(scene, x, y, index) {
         super(scene, x, y, index,
             Furina.DEFAULT.name, Furina.DEFAULT.id, "character");
-
-        this.level = this.getLevel();
-        this.hp = this.getMaxHP(); // HP ban đầu  
+ 
         this.element = Furina.DEFAULT.element; // Element 
         this.description = Furina.DEFAULT.description; // Mô tả
-        this.weapon = null; // vũ khí
+     
 
         this.createCard();
         scene.add.existing(this);

@@ -110,7 +110,7 @@ export default class EquipScene extends Phaser.Scene {
                 itemBg.strokeRoundedRect(-itemSize / 2, -itemSize / 2, itemSize, itemSize, 15);
 
                 // Icon item từ assets thật
-                const itemIcon = this.add.image(0, 0, itemKey);
+                const itemIcon = this.add.image(0, 0, 'item', itemKey);
                 itemIcon.setDisplaySize(itemSize, itemSize); // Tăng tỉ lệ lên 80% (từ 60%)
                 itemIcon.setOrigin(0.5);
 
@@ -181,11 +181,11 @@ export default class EquipScene extends Phaser.Scene {
             let slotImage;
             if (this.equipmentSlots[col] && this.equipmentSlots[col].item) {
                 // Nếu có item, hiển thị item icon
-                slotImage = this.add.image(0, 0, this.equipmentSlots[col].item.image);
+                slotImage = this.add.image(0, 0, 'item', this.equipmentSlots[col].item.image);
                 slotImage.setDisplaySize(slotSize, slotSize); // Kích thước đầy đủ
             } else {
                 // Nếu không có item, hiển thị equipment-slot placeholder
-                slotImage = this.add.image(0, 0, 'equipment-slot');
+                slotImage = this.add.image(0, 0, 'item', 'equipment-slot');
                 slotImage.setDisplaySize(slotSize * 0.8, slotSize * 0.8); // Kích thước 80%
                 slotImage.setAlpha(0.3); // Làm ảnh trong suốt 50%
             }
@@ -239,7 +239,7 @@ export default class EquipScene extends Phaser.Scene {
             const slotData = this.equipmentSlots[index];
             if (slotData.image) {
                 // Tái sử dụng image cũ, chỉ cập nhật texture và thuộc tính
-                slotData.image.setTexture(item.image);
+                slotData.image.setTexture('item', item.image);
                 slotData.image.setDisplaySize(120, 120); // slotSize
                 slotData.image.setAlpha(1); // Hiển thị đầy đủ
             }
@@ -270,7 +270,7 @@ export default class EquipScene extends Phaser.Scene {
                 // Cập nhật image về equipment-slot placeholder
                 if (slotData.image) {
                     // Tái sử dụng image cũ, chỉ cập nhật texture và thuộc tính
-                    slotData.image.setTexture('equipment-slot');
+                    slotData.image.setTexture('item', 'equipment-slot');
                     slotData.image.setDisplaySize(120 * 0.8, 120 * 0.8); // slotSize * 0.8
                     slotData.image.setAlpha(0.3); // Làm ảnh trong suốt
                 }
@@ -326,7 +326,7 @@ export default class EquipScene extends Phaser.Scene {
         }).setOrigin(0.5);
 
         // Icon item - căn giữa theo chiều ngang
-        const itemIcon = this.add.image(0, - 120, item.image);
+        const itemIcon = this.add.image(0, - 120, 'item', item.image);
         itemIcon.setDisplaySize(180, 180); // Tăng kích thước icon
         itemIcon.setOrigin(0.5);
 
@@ -586,11 +586,11 @@ export default class EquipScene extends Phaser.Scene {
             const validItems = this.equipmentSlots
                 .filter(slot => slot && slot.item && slot.item.nameId)
                 .map(slot => slot.item.nameId);
-            
+
             // Nếu không có item nào có ý nghĩa thì lưu null, ngược lại lưu array các nameId
             const equipmentData = validItems.length > 0 ? validItems : null;
             localStorage.setItem('equipment', JSON.stringify(equipmentData));
-            
+
             // Chuyển về MenuScene
             this.scene.start('MenuScene');
         });
@@ -605,12 +605,12 @@ export default class EquipScene extends Phaser.Scene {
             const savedEquipment = localStorage.getItem('equipment');
             if (savedEquipment && savedEquipment !== 'null') {
                 const equipmentData = JSON.parse(savedEquipment);
-                
+
                 // Kiểm tra nếu equipmentData là array và có dữ liệu
                 if (Array.isArray(equipmentData) && equipmentData.length > 0) {
                     // Reset trước khi khôi phục
                     this.resetEquipmentSlots();
-                    
+
                     equipmentData.forEach(nameId => {
                         if (nameId && this.listItems.has(nameId)) {
                             // Lấy item từ listItems
@@ -651,16 +651,16 @@ export default class EquipScene extends Phaser.Scene {
                 itemData.container.setVisible(true);
             }
         });
-        
+
         // Reset từng equipment slot về trạng thái ban đầu
         // (giữ nguyên container, chỉ reset data và texture)
         for (let i = 0; i < this.equipmentSlots.length; i++) {
             if (this.equipmentSlots[i] && this.equipmentSlots[i].image) {
                 // Reset item data
                 this.equipmentSlots[i].item = null;
-                
+
                 // Reset image về placeholder
-                this.equipmentSlots[i].image.setTexture('equipment-slot');
+                this.equipmentSlots[i].image.setTexture('item', 'equipment-slot');
                 this.equipmentSlots[i].image.setDisplaySize(120 * 0.8, 120 * 0.8);
                 this.equipmentSlots[i].image.setAlpha(0.3);
             }

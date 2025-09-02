@@ -21,9 +21,47 @@ import {
     BOMB_ASSETS,
     EMPTY_CARD,
     ITEM_ASSETS,
-    UI_ASSETS,
-    ELEMENT_ASSETS
+    ELEMENT_ASSETS,
+    WEAPON_SWORD_BADGE_ASSETS,
+    WEAPON_CATALYST_BADGE_ASSETS,
+    BACKGROUND_ASSETS,
+    CHARACTER_SPRITE_ASSETS,
+    SOUND_EFFECT_ASSETS,
+    ANIMATIONS_ASSETS
 } from '../utils/AssetConstants.js';
+
+import item from '../data/atlas/item.json';
+import character from '../data/atlas/character.json';
+import element from '../data/atlas/element.json';
+import coin from '../data/atlas/coin.json';
+import weapon_sword from '../data/atlas/weapon-sword.json';
+// import weapon_catalyst from '../data/atlas/weapon-catalyst.json';
+// import weapon_polearm from '../data/atlas/weapon-polearm.json';
+// import weapon_claymore from '../data/atlas/weapon-claymore.json';
+// import weapon_bow from '../data/atlas/weapon-bow.json';
+
+import enemy_hilichurl from '../data/atlas/enemy-hilichurl.json';
+
+import food from '../data/atlas/food.json';
+import trap from '../data/atlas/trap.json';
+import treasure from '../data/atlas/treasure.json';
+import bomb from '../data/atlas/bomb.json';
+
+import weapon_sword_badge from '../data/atlas/weapon-sword-badge.json';
+// import weapon_catalyst_badge from '../data/atlas/weapon-catalyst-badge.json';
+// import weapon_polearm_badge from '../data/atlas/weapon-polearm-badge.json';
+// import weapon_claymore_badge from '../data/atlas/weapon-claymore-badge.json';
+// import weapon_bow_badge from '../data/atlas/weapon-bow-badge.json';
+
+// import enemy_abyss from '../data/atlas/enemy-abyss.json';
+// import enemy_slime from '../data/atlas/enemy-slime.json';
+// import enemy_shroom from '../data/atlas/enemy-shroom.json';
+// import enemy_automatons from '../data/atlas/enemy-automatons.json';
+// import enemy_kairagi from '../data/atlas/enemy-kairagi.json';
+// import enemy_eremite from '../data/atlas/enemy-eremite.json';
+// import enemy_fatui from '../data/atlas/enemy-fatui.json';
+// import enemy_boss from '../data/atlas/enemy-boss.json';
+
 
 export default class AssetManager {
     constructor() {
@@ -58,24 +96,32 @@ export default class AssetManager {
         // Thêm assets vào queue
         switch (sceneName) {
             case 'MenuScene':
-                this.loadImages([...UI_ASSETS, ...CHARACTER_ASSETS]);
+                this.loadAtlas(item);
+                this.loadAtlas(character);
+                this.loadImages([...BACKGROUND_ASSETS, ...CHARACTER_SPRITE_ASSETS]);
                 break;
 
             case 'GameScene':
-                this.loadImages(this.getLoadImagesListGameScene());
+                this.loadAudios([...SOUND_EFFECT_ASSETS]);
+                this.loadImages([...ANIMATIONS_ASSETS]);
+                this.getLoadImagesListGameScene();
                 break;
 
             case 'EquipScene':
-                this.loadImages(ITEM_ASSETS);
+                // this.loadAtlas(item);
+                console.log('EquipScene load item assets');
                 break;
 
             case 'LibraryScene':
             case 'MapScenes':
-                this.loadImages([...CHARACTER_ASSETS, ...ELEMENT_ASSETS, ...EMPTY_CARD]);
+                // this.loadImages([...CHARACTER_ASSETS, 
+                //     ...ELEMENT_ASSETS, ...EMPTY_CARD]);
+                console.log('LibraryScene load EMPTY_CARD assets');
                 break;
 
             case 'SelectCharacterScene':
-                this.loadImages(ELEMENT_ASSETS);
+                this.loadAtlas(element);
+                // this.loadImages(ELEMENT_ASSETS);
                 break;
 
             default:
@@ -100,7 +146,14 @@ export default class AssetManager {
                     frameWidth: 350,
                     frameHeight: 590
                 });
-            } else {
+            } else if (key.endsWith('animations')) {
+                this.scene.load.spritesheet(key, path, {
+                    frameWidth: 192,
+                    frameHeight: 192
+                });
+            }
+
+            else {
                 // Nếu không có đuôi "sprite" thì load như image bình thường
                 this.scene.load.image(key, path);
                 // console.log(`AssetManager: Đã load image ${key} từ ${path}`);
@@ -120,12 +173,41 @@ export default class AssetManager {
     }
 
     /**
+     * Load images từ atlas JSON data
+     * @param {Object} jsonData - JSON data chứa thông tin atlas
+     * @param {string} jsonData.meta.image - Tên file atlas image
+     * @param {string} jsonData.meta.path - Đường dẫn tương đối đến file atlas image
+     * @param {Object} jsonData.meta.size - Kích thước atlas (w, h)
+     * @param {Object} jsonData.frames - Object chứa thông tin frames với key và frame data
+     */
+    loadAtlas(jsonData) {
+        if (!this.scene) {
+            console.warn('AssetManager: Scene chưa được set');
+            return;
+        }
+
+        // Tạo key cho atlas (sử dụng tên từ JSON hoặc tạo key mặc định)
+        const atlasKey = jsonData.meta.image.replace('.webp', '');
+
+        // Kiểm tra nếu atlas đã tồn tại thì không load lại
+        if (this.scene.textures.exists(atlasKey)) {
+            // console.log(`AssetManager: Atlas ${atlasKey} đã tồn tại`);
+            return;
+        }
+
+        // Sử dụng path từ metadata nếu có, nếu không thì fallback về cách cũ
+        const imageURL = jsonData.meta.path.replace(/^\.\.\\public\\/, '').replace(/\\/g, '/');
+
+        // Sử dụng Phaser's built-in load.atlas method
+        this.scene.load.atlas(atlasKey, imageURL, jsonData);
+    }
+
+    /**
      * Load audio files
      */
     loadAudio(key, path) {
         if (!this.scene.cache.audio.exists(key)) {
             this.scene.load.audio(key, path);
-            // console.log(`AssetManager: Đã load audio ${key} từ ${path}`);
         }
     }
 
@@ -141,19 +223,31 @@ export default class AssetManager {
      */
     getLoadImagesListGameScene() {
         let loadImagesList = [];
-        loadImagesList.push(...ITEM_ASSETS);
-        // Thêm các loại thẻ vào danh sách
-        loadImagesList.push(...COIN_ASSETS);
-        loadImagesList.push(...CHARACTER_ASSETS);
-        loadImagesList.push(...WEAPON_SWORD_ASSETS);
-        loadImagesList.push(...WEAPON_CATALYST_ASSETS);
+
+        // loadImagesList.push(...CHARACTER_SPRITE_ASSETS);
+        this.loadAtlas(item);
+        this.loadAtlas(character);
+
+        this.loadAtlas(coin);
+
+        this.loadAtlas(weapon_sword);
+
+        // this.loadAtlas(weapon_catalyst);
+
+        // this.loadAtlas(weapon_polearm);
+
+        // this.loadAtlas(weapon_claymore);
+
+        this.loadAtlas(enemy_hilichurl);
+
+
 
         // loadImagesList.push(...WEAPON_POLEARM_ASSETS);
         // loadImagesList.push(...WEAPON_CLAYMORE_ASSETS);
         // loadImagesList.push(...WEAPON_BOW_ASSETS);
 
-        loadImagesList.push(...ENEMY_HILICHURL_ASSETS);
-        loadImagesList.push(...ENEMY_SLIME_ASSETS);
+
+        // loadImagesList.push(...ENEMY_SLIME_ASSETS);
 
         // loadImagesList.push(...ENEMY_ABYSS_ASSETS);
         // loadImagesList.push(...ENEMY_SHROOM_ASSETS);
@@ -162,17 +256,39 @@ export default class AssetManager {
         // loadImagesList.push(...ENEMY_EREMITE_ASSETS);
         // loadImagesList.push(...ENEMY_FATUI_ASSETS);
         // loadImagesList.push(...ENEMY_BOSS_ASSETS);
+        this.loadAtlas(food);
+        this.loadAtlas(trap);
+        this.loadAtlas(treasure);
+        this.loadAtlas(bomb);
 
-        loadImagesList.push(...FOOD_ASSETS);
-        loadImagesList.push(...TRAP_ASSETS);
-        loadImagesList.push(...TREASURE_ASSETS);
-        loadImagesList.push(...BOMB_ASSETS);
-        loadImagesList.push(...EMPTY_CARD);
+        this.loadAtlas(weapon_sword_badge);
+        // this.loadAtlas(weapon_catalyst_badge);
+        // this.loadAtlas(weapon_polearm_badge);
+        // this.loadAtlas(weapon_claymore_badge);
+        // this.loadAtlas(weapon_bow_badge);
+        // this.loadAtlas(enemy_abyss);
+        // this.loadAtlas(enemy_slime);
+        // this.loadAtlas(enemy_shroom);
+        // this.loadAtlas(enemy_automatons);
+        // this.loadAtlas(enemy_kairagi);
+        // this.loadAtlas(enemy_eremite);
+        // this.loadAtlas(enemy_fatui);
+        // this.loadAtlas(enemy_boss);
+        // loadImagesList.push(...FOOD_ASSETS);
+        // loadImagesList.push(...TRAP_ASSETS);
+        // loadImagesList.push(...TREASURE_ASSETS);
+        // loadImagesList.push(...BOMB_ASSETS);
+        // loadImagesList.push(...EMPTY_CARD);
 
+        // loadImagesList.push(...WEAPON_SWORD_BADGE_ASSETS);
+        // loadImagesList.push(...WEAPON_CATALYST_BADGE_ASSETS);
+
+
+        // this.loadImages(loadImagesList);
         return loadImagesList;
     }
 
-    
+
 }
 
 // Export singleton instance

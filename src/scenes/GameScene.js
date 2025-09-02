@@ -33,6 +33,8 @@ export default class GameScene extends Phaser.Scene {
     // Tạo deck cards - đặt ở bottom
     this.createDeck();
 
+    this.sellButton = this.createSellWeapon();
+
     // Resume audio context sau user interaction
     // this.resumeAudioContext();
   }
@@ -89,7 +91,7 @@ export default class GameScene extends Phaser.Scene {
       strokeThickness: 2
     });
 
-    
+
 
     // 3 nút item - lấy từ localStorage và tạo từ itemFactory
     const itemButtons = this.createItemButtonsFromStorage();
@@ -142,7 +144,7 @@ export default class GameScene extends Phaser.Scene {
     backgroundItem.setAlpha(0.5);
 
     // 2. Tạo hình ảnh item  
-    const itemImage = this.add.image(0, 0, itemData.image);
+    const itemImage = this.add.image(0, 0, 'item', itemData.image);
     itemImage.setDisplaySize(80, 80); // Kích thước ảnh nhỏ hơn background
 
     // 3. Tạo text đếm ở góc trên phải
@@ -211,6 +213,105 @@ export default class GameScene extends Phaser.Scene {
       // Trả về array rỗng nếu có lỗi
       return [];
     }
+  }
+  /**
+   * Tạo nút bán vũ khí cho character
+   * @param {Character} character - Character cần tạo nút bán vũ khí
+   * @param {number} x - Vị trí x của nút
+   * @param {number} y - Vị trí y của nút
+   */
+  createSellWeapon() {
+    const { width, height } = this.scale;
+    const x = width * 0.75;
+    const y = height * 0.95;
+
+    // Tạo container cho nút bán vũ khí
+    const sellButtonContainer = this.add.container(x, y);
+
+    // Tạo background cho nút
+    const buttonBackground = this.add.graphics();
+    buttonBackground.fillStyle(0x051926, 0.5);
+    buttonBackground.fillRoundedRect(-90, -30, 180, 60, 5);
+    buttonBackground.lineStyle(2, 0xd1d1d1, 0.5);
+    buttonBackground.strokeRoundedRect(-90, -30, 180, 60, 5);
+
+
+    // Tạo text "→🪙"
+    const sellText = this.add.text(16, 0, '→🪙', {
+      fontSize: '32px',
+      color: '#ffffff',
+      fontStyle: 'bold',
+      fontFamily: 'Arial, sans-serif',
+      fontWeight: 'bold',
+      stroke: '#000000',
+      strokeThickness: 2
+    }).setOrigin(0.5);
+
+    const PriceText = this.add.text(32, -15, '0', {
+      fontSize: '24px',
+      color: '#ffffff',
+      fontStyle: 'bold',
+      fontFamily: 'Arial, sans-serif',
+      fontWeight: 'bold'
+    }).setOrigin(0.5);
+
+    // Tạo hình ảnh vũ khí với texture đúng
+    const weaponImage =
+      this.add.image(-40, 0, '')
+        // 'weapon-' + character.weapon.default.category + '-badge',
+        //  character.weapon.default.id + '-badge')
+        .setDisplaySize(6, 6);
+
+    // Thêm padding left cho text để phủ lên background
+    // sellText.setPadding({ left: 15, right: 5, top: 5, bottom: 5 });
+
+    // Thêm tất cả vào container
+    sellButtonContainer.add([buttonBackground, weaponImage, sellText, PriceText]);
+
+    // Làm cho nút có thể click
+    sellButtonContainer.setInteractive(new Phaser.Geom.Rectangle(-90, -30, 180, 60), Phaser.Geom.Rectangle.Contains);
+
+    // Thêm event click
+    sellButtonContainer.on('pointerdown', () => {
+      const weapon = this.gameManager.cardManager.CardCharacter.weapon;
+
+      const durability = weapon?.durability;
+      if (durability > 0) {
+        // Thêm logic bán vũ khí ở đây
+        console.log('Bán vũ khí:', weapon.default.id);
+        this.gameManager.addCoin(weapon.durability);
+        // Xóa vũ khí khỏi character
+        this.gameManager.cardManager.CardCharacter.weapon = null;
+        this.gameManager.cardManager.CardCharacter.weaponDisplay.updateText(0);
+        this.gameManager.cardManager.CardCharacter.weaponBadgeDisplay.updateTexture('');
+        this.sellButton.hideButton();
+      }
+    });
+
+    // Thêm hiệu ứng hover
+    sellButtonContainer.on('pointerover', () => {
+      sellButtonContainer.setScale(1.1);
+    });
+
+    sellButtonContainer.on('pointerout', () => {
+      sellButtonContainer.setScale(1);
+    });
+    sellButtonContainer.setVisible(false);
+
+    return {
+      updateButton: () => {
+        if (this.gameManager.cardManager.CardCharacter.weapon?.durability > 0) {
+          sellButtonContainer.setVisible(true);
+          const durability = this.gameManager.cardManager.CardCharacter.weapon?.durability;
+          PriceText.setText(durability.toString());
+          weaponImage.setTexture('weapon-' + this.gameManager.cardManager.CardCharacter.weapon.default.category + '-badge',
+            this.gameManager.cardManager.CardCharacter.weapon.default.id + '-badge');
+        }
+      },
+      hideButton: () => {
+        sellButtonContainer.setVisible(false);
+      }
+    };
   }
 
 }

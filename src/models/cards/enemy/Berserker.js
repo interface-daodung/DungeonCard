@@ -1,9 +1,9 @@
 // Berserker.js - Thẻ enemy Hilichurl Berserker
 // Chức năng: Enemy điên cuồng, tấn công mạnh hơn khi máu thấp
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class Berserker extends Card {
+export default class Berserker extends Enemy {
 
     static DEFAULT = {
         id: 'berserker',
@@ -11,6 +11,7 @@ export default class Berserker extends Card {
         element: 'pyro',
         type: 'enemy',
         description: 'Berserker - Kẻ địch điên cuồng, tấn công mạnh hơn khi máu thấp.',
+        clan: 'hilichurl',
         rarity: 4
     }
 

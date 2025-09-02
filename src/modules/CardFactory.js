@@ -140,7 +140,7 @@ class CardFactory {
 
         // Hệ thống Rarity-based với data từ dungeonList.json
         this.stageCardPools = {};
-        
+
         // Chuyển đổi dungeonList thành stageCardPools format
         dungeonList.forEach(dungeon => {
             this.stageCardPools[dungeon.stageId] = {
@@ -198,8 +198,14 @@ class CardFactory {
                 // Tính tổng trọng số của tất cả thẻ trong type này
                 for (const cardName of availableCards[typeName]) {
                     if (this.cardClasses[cardName]) {
-                        // Lấy rarity từ class hoặc sử dụng giá trị mặc định
-                        const rarity = this.cardClasses[cardName].DEFAULT?.rarity || 3;
+                        // Kiểm tra xem rarity có được định nghĩa trong DEFAULT không
+                        if (!this.cardClasses[cardName].DEFAULT?.rarity) {
+                            console.error(`CardFactory: Thẻ '${cardName}' không thể được tạo ngẫu nhiên - thiếu thuộc tính rarity trong DEFAULT`);
+                            continue; // Bỏ qua thẻ này nhưng không ảnh hưởng đến thẻ khác
+                        }
+
+                        // Lấy rarity từ class
+                        const rarity = this.cardClasses[cardName].DEFAULT.rarity;
                         const weight = rarity * 10;
                         typeTotalWeight += weight;
                     }
@@ -214,8 +220,14 @@ class CardFactory {
             if (availableCards[typeName] && typeTotalWeights[typeName]) {
                 for (const cardName of availableCards[typeName]) {
                     if (this.cardClasses[cardName]) {
-                        // Lấy rarity từ class hoặc sử dụng giá trị mặc định
-                        const rarity = this.cardClasses[cardName].DEFAULT?.rarity || 3;
+                        // Kiểm tra xem rarity có được định nghĩa trong DEFAULT không
+                        if (!this.cardClasses[cardName].DEFAULT?.rarity) {
+                            // Thẻ này đã được log lỗi ở trên, bỏ qua ở đây
+                            continue;
+                        }
+
+                        // Lấy rarity từ class
+                        const rarity = this.cardClasses[cardName].DEFAULT.rarity;
                         const baseWeight = rarity * 10;
 
                         // Tính trọng số thực tế = (trọng số cơ bản / tổng trọng số type) * tỷ lệ type
@@ -238,7 +250,9 @@ class CardFactory {
      * @param {number} index - Index của thẻ
      * @returns {Card} Thẻ ngẫu nhiên
      */
-    createRandomCard(scene, x, y, index) {
+    createRandomCard(scene, index) {
+        const { x, y } = scene.gameManager.cardManager.getGridPositionCoordinates(index);
+
         const cardWeights = this._calculateCardWeights();
 
         // Tính tổng trọng số thực tế

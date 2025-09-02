@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { GradientText } from '../utils/GradientText.js';
 import { HeaderUI } from '../utils/HeaderUI.js';
-import { SpritesheetCharacter } from '../utils/SpritesheetCharacter.js';
+import { SpritesheetWrapper } from '../utils/SpritesheetWrapper.js';
 import cardCharacterList from '../data/cardCharacterList.json';
 
 export default class MenuScene extends Phaser.Scene {
@@ -23,14 +23,8 @@ export default class MenuScene extends Phaser.Scene {
         const background = this.add.image(width / 2, height / 2, 'background');
         background.setDisplaySize(width, height);
 
-        // Nếu không có background image, tạo background mặc định
-        if (!this.textures.exists('background')) {
-            this.add.rectangle(width / 2, height / 2, width, height, 0x96576a);
-        }
-
         // Tạo UI header (coin và settings)
         HeaderUI.createHeaderUI(this, width, height);
-
 
         // Tạo tiêu đề game với gradient text
         GradientText.createGameTitle(this, 'DUNGEON CARD', width / 2, height * 0.18);
@@ -46,8 +40,11 @@ export default class MenuScene extends Phaser.Scene {
         // Tạo nút equip Game
         this.createButton(width / 2 + width * 0.3, height * 0.8, 'equip', 'Trang bị', 'EquipScene');
 
+        // Tạo nút Test Graphics
+        // this.createButton(width / 2, height * 0.7, 'sword', 'Test Graphics', 'TestGraphicsRenderTexture');
+
         // Nút Options - đặt ở 75% height
-        const optionsButton = this.add.text(width / 2, height * 0.95, 'OPTIONS', {
+        const optionsButton = this.add.text(width / 2, height * 0.95, 'Test dev', {
             fontSize: '24px',
             fill: '#95a5a6',
             fontFamily: 'Arial',
@@ -73,7 +70,7 @@ export default class MenuScene extends Phaser.Scene {
         const button = this.add.container(x, y);
 
         // Icon
-        const icon = this.add.image(0, 20, iconName);
+        const icon = this.add.image(0, 20, 'item', iconName);
         icon.setDisplaySize(180, 180);
 
         // Text - mặc định ẩn
@@ -137,7 +134,7 @@ export default class MenuScene extends Phaser.Scene {
 
         // Kiểm tra xem TextureCard có đuôi '-sprite' hay không
         const hasSpriteSuffix = TextureCard.endsWith('-sprite');
-        
+
         // Tạo viền với màu khác nhau dựa trên loại card
         const cardBorder = this.add.graphics();
         cardBorder.lineStyle(4, hasSpriteSuffix ? 0xdcc06f : 0xffffff, 1);
@@ -147,12 +144,12 @@ export default class MenuScene extends Phaser.Scene {
         let cardImage;
         if (hasSpriteSuffix) {
             // Nếu có đuôi '-sprite', dùng SpritesheetCharacter.create
-            cardImage = SpritesheetCharacter.create(
+            cardImage = SpritesheetWrapper.CharacterAnimation(
                 this, 0, 0, TextureCard, cardWidth, cardHeight);
         } else {
             // Nếu không có đuôi '-sprite', dùng this.add.image
-            cardImage = this.add.image(0, 0, TextureCard)
-            .setDisplaySize(cardWidth, cardHeight);
+            cardImage = this.add.image(0, 0, 'character', TextureCard)
+                .setDisplaySize(cardWidth, cardHeight);
         }
 
         // Tạo container cho mỗi hình ảnh
@@ -206,7 +203,7 @@ export default class MenuScene extends Phaser.Scene {
                     TextureCard = [this.cards[(selectedIndex - 1 + this.cards.length) % this.cards.length].id,
                     this.cards[selectedIndex].id,
                     this.cards[(selectedIndex + 1) % this.cards.length].id];
-                    
+
                     // Lấy CharacterLevel từ localStorage
                     let characterLevels = localStorage.getItem('characterLevel');
                     if (characterLevels !== null) {

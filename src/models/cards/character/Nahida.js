@@ -1,9 +1,9 @@
 // Nahida.js - Thẻ nhân vật Nahida
 // Chức năng: Nhân vật người chơi điều khiển
 
-import Card from '../../../modules/Card.js';
+import Character from '../../../modules/typeCard/character.js';
 
-export default class Nahida extends Card {
+export default class Nahida extends Character {
 
     static DEFAULT = {
         id: 'nahida',
@@ -16,12 +16,10 @@ export default class Nahida extends Card {
     constructor(scene, x, y, index) {
         super(scene, x, y, index,
             Nahida.DEFAULT.name, Nahida.DEFAULT.id, "character");
-
-        this.level = this.getLevel();
-        this.hp = this.getMaxHP(); // HP ban đầu  
+ 
         this.element = Nahida.DEFAULT.element; // Element 
         this.description = Nahida.DEFAULT.description; // Mô tả
-        this.weapon = null; // vũ khí
+ 
 
         this.createCard();
         scene.add.existing(this);

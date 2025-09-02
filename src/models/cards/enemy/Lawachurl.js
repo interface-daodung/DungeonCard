@@ -1,15 +1,16 @@
 // Lawachurl.js - Thẻ enemy Hilichurl Lawachurl
 // Chức năng: Boss Hilichurl mạnh mẽ, có khả năng tấn công và phòng thủ cao
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class Lawachurl extends Card {
+export default class Lawachurl extends Enemy {
     static DEFAULT = {
         id: 'lawachurl',
         name: 'Lawachurl',
         element: 'geo',
         type: 'enemy',
         description: 'Lawachurl - Boss Hilichurl mạnh mẽ, có khả năng tấn công và phòng thủ cao.',
+        clan: 'hilichurl',
         rarity: 5
     }
     constructor(scene, x, y, index) {

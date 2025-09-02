@@ -1,9 +1,9 @@
 // Zhongli.js - Thẻ nhân vật Zhongli
 // Chức năng: Nhân vật người chơi điều khiển
 
-import Card from '../../../modules/Card.js';
+import Character from '../../../modules/typeCard/character.js';
 
-export default class Zhongli extends Card {
+export default class Zhongli extends Character {
 
     static DEFAULT = {
         id: 'zhongli',
@@ -17,11 +17,10 @@ export default class Zhongli extends Card {
         super(scene, x, y, index,
             Zhongli.DEFAULT.name, Zhongli.DEFAULT.id, "character");
 
-        this.level = this.getLevel();
-        this.hp = this.getMaxHP(); // HP ban đầu  
+    
         this.element = Zhongli.DEFAULT.element; // Element 
         this.description = Zhongli.DEFAULT.description; // Mô tả
-        this.weapon = null; // vũ khí
+   
 
         this.createCard();
         scene.add.existing(this);

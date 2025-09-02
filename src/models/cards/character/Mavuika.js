@@ -1,9 +1,9 @@
 // Mavuika.js - Thẻ nhân vật Mavuika
 // Chức năng: Nhân vật người chơi điều khiển
 
-import Card from '../../../modules/Card.js';
+import Character from '../../../modules/typeCard/character.js';
 
-export default class Mavuika extends Card {
+export default class Mavuika extends Character   {
 
     static DEFAULT = {
         id: 'mavuika',
@@ -17,11 +17,10 @@ export default class Mavuika extends Card {
         super(scene, x, y, index,
             Mavuika.DEFAULT.name, Mavuika.DEFAULT.id, "character");
 
-            this.level = this.getLevel();
-            this.hp = this.getMaxHP(); // HP ban đầu  
+         
             this.element = Mavuika.DEFAULT.element; // Element 
             this.description = Mavuika.DEFAULT.description; // Mô tả
-            this.weapon = null; // vũ khí
+ 
     
             this.createCard();
             scene.add.existing(this);

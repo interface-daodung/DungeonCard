@@ -183,7 +183,7 @@ export default class LibraryScene extends Phaser.Scene {
         });
 
         // === ẢNH THẺ ===
-        let cardImage = this.add.image(0, 0, 'eula')  // Vị trí ảnh (trên giữa thẻ)
+        let cardImage = this.add.image(0, 0, 'empty')  // Vị trí ảnh (trên giữa thẻ)
             .setDisplaySize(width, height); // Kích thước hiển thị ảnh scale theo thẻ
 
         // === TÊN THẺ ===
@@ -198,7 +198,7 @@ export default class LibraryScene extends Phaser.Scene {
         // === CONTAINER CHỨA TẤT CẢ ===
         let child = this.add.container()
             .setSize(width, height)              // Kích thước container (bằng kích thước thẻ)
-            .add([background, cardImage, text]);  // Thêm các thành phần vào container
+            .add([ cardImage, background, text]);  // Thêm các thành phần vào container
 
         // Lưu cardIndex vào container để có thể truy cập sau này
         child.cardIndex = cardIndex;

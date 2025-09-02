@@ -1,15 +1,16 @@
 // Shooter.js - Thẻ enemy Hilichurl Shooter
 // Chức năng: Enemy bắn cung từ xa, tấn công cơ bản
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class Shooter extends Card {
+export default class Shooter extends Enemy {
     static DEFAULT = {
         id: 'shooter',
         name: 'Shooter',
         element: 'physical',
         type: 'enemy',
         description: 'Shooter - Kẻ địch bắn cung từ xa, tấn công cơ bản.',
+        clan: 'hilichurl',
         rarity: 2
     }
     constructor(scene, x, y, index) {

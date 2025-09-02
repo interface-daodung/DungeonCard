@@ -1,9 +1,9 @@
 // Crackling.js - Thẻ enemy Hilichurl Crackling
 // Chức năng: Enemy nổ khi chết, gây damage cho người chơi gần đó
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class Crackling extends Card {
+export default class Crackling extends Enemy {
 
     static DEFAULT = {
         id: 'crackling',
@@ -11,6 +11,7 @@ export default class Crackling extends Card {
         element: 'electro',
         type: 'enemy',
         description: 'Crackling - Kẻ địch nổ khi chết, gây damage cho người chơi gần đó.',
+        clan: 'hilichurl',
         rarity: 3
     }
 

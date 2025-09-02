@@ -1,15 +1,16 @@
 // HilistrayWater.js - Thẻ enemy Hilichurl Hilistray Water
 // Chức năng: Enemy nước, có khả năng chữa lành và tạo hiệu ứng ẩm ướt
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class HilistrayWater extends Card {
+export default class HilistrayWater extends Enemy {
     static DEFAULT = {
         id: 'hilistray-water',
         name: 'Hilistray Water',
         element: 'hydro',
         type: 'enemy',
         description: 'Hilistray Water - Kẻ địch nước, có khả năng chữa lành và tạo hiệu ứng ẩm ướt.',
+        clan: 'hilichurl',
         rarity: 2
     }
     constructor(scene, x, y, index) {

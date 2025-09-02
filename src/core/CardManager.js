@@ -46,6 +46,7 @@ export default class CardManager {
         } else {
             console.warn(`CardManager: Invalid grid index ${gridIndex}`);
         }
+        return card;
     }
 
     /**
@@ -103,7 +104,7 @@ export default class CardManager {
                 // Tạo card mới sử dụng CardFactory
                 if (i === 4) continue;
                 // Tạo card ngẫu nhiên
-                const card = this.cardFactory.createRandomCard(this.scene, coords.x, coords.y, i);
+                const card = this.cardFactory.createRandomCard(this.scene, i);
                 // Thêm card vào vị trí grid
                 this.addCard(card, i);
             }
@@ -142,6 +143,46 @@ export default class CardManager {
     }
 
     /**
+     * Hoán đổi vị trí của hai card
+     * @param {number} fromIndex - Vị trí card thứ nhất
+     * @param {number} toIndex - Vị trí card thứ hai
+     * @returns {boolean} - True nếu hoán đổi thành công
+     */
+    swapCard(fromIndex, toIndex) {
+        if (fromIndex < 0 || fromIndex >= 9 || toIndex < 0 || toIndex >= 9) {
+            console.warn(`CardManager: Invalid indices for swap: ${fromIndex} <-> ${toIndex}`);
+            return false;
+        }
+
+        const cardFrom = this.cards[fromIndex];
+        const cardTo = this.cards[toIndex];
+
+        if (!cardFrom || !cardTo) {
+            console.warn(`CardManager: Missing card at position ${fromIndex} or ${toIndex}`);
+            return false;
+        }
+
+        // Hoán đổi index của hai card
+        const tempIndex = cardFrom.index;
+        cardFrom.index = cardTo.index;
+        cardTo.index = tempIndex;
+
+        // Hoán đổi vị trí trong array
+        this.cards[fromIndex] = cardTo;
+        this.cards[toIndex] = cardFrom;
+
+        // Cập nhật vị trí hiển thị của hai card
+        const coordsFrom = this.getGridPositionCoordinates(toIndex);
+        const coordsTo = this.getGridPositionCoordinates(fromIndex);
+
+        cardFrom.setPosition(coordsFrom.x, coordsFrom.y);
+        cardTo.setPosition(coordsTo.x, coordsTo.y);
+
+        //console.log(`CardManager: Swapped cards ${cardFrom.type} and ${cardTo.type} between positions ${fromIndex} and ${toIndex}`);
+        return true;
+    }
+
+    /**
      * Disable tất cả card để tránh nhận sự kiện khi đang di chuyển
      */
     disableAllCards() {
@@ -174,14 +215,20 @@ export default class CardManager {
      * @returns {number} Index của character card, -1 nếu không tìm thấy
      */
     getCharacterIndex() {
-        for (let i = 0; i < this.cards.length; i++) {
-            if (this.cards[i] && this.cards[i].type === 'character') {
-                //console.log(`CardManager: Tìm thấy character card tại index ${i}`);
-                return i;
-            }
-        }
+        // Kiểm tra this.CardCharacter.index
+        if (this.CardCharacter && this.CardCharacter.index !== undefined) {
+            const characterIndex = this.CardCharacter.index;
 
-        console.warn('CardManager: Không tìm thấy character card');
-        return -1;
+            // Kiểm tra xem card tại vị trí đó có type 'character' không
+            if (this.cards[characterIndex] && this.cards[characterIndex].type === 'character') {
+                return characterIndex;
+            } else {
+                console.error(`CardManager: Card tại vị trí ${characterIndex} không phải là character. Type: ${this.cards[characterIndex]?.type || 'undefined'}`);
+                return -1;
+            }
+        } else {
+            console.error('CardManager: CardCharacter.index không tồn tại hoặc undefined');
+            return -1;
+        }
     }
 }

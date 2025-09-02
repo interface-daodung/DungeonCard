@@ -16,99 +16,182 @@ export const COIN_ASSETS = [
     { key: 'hydro-fragment', path: 'assets/images/cards/coin/hydro-fragment.webp' },
     { key: 'hydro-resonance', path: 'assets/images/cards/coin/hydro-resonance.webp' },
     { key: 'pyro-fragment', path: 'assets/images/cards/coin/pyro-fragment.webp' },
-    { key: 'pyro-resonance', path: 'assets/images/cards/coin/pyro-resonance.webp' }
+    { key: 'pyro-resonance', path: 'assets/images/cards/coin/pyro-resonance.webp' },
+    { key: 'empty', path: 'assets/images/cards/empty.webp' }
+];
+
+export const ANIMATIONS_ASSETS = [
+    { key: 'slash-animations', path: 'assets/images/animations/Slash.png' },
+    { key: 'bomb-animations', path: 'assets/images/animations/Explosion1.png' },
+    { key: 'breathe-fire-animations', path: 'assets/images/animations/Breath.png' }
+];
+
+export const SOUND_EFFECT_ASSETS = [
+    { key: 'sword-sound', path: 'assets/sounds/SE/sword.mp3' },
+    { key: 'bomb-sound', path: 'assets/sounds/SE/explosive.mp3' },
+    { key: 'breathe-fire-sound', path: 'assets/sounds/SE/breathe-fire.mp3' },
+    { key: 'move-sound', path: 'assets/sounds/SE/move.mp3' }
 ];
 
 // Character cards
 export const CHARACTER_ASSETS = [
-
-    { key: 'eula-sprite', path: 'assets/images/cards/character/eula-sprite.webp' },
-    { key: 'furina-sprite', path: 'assets/images/cards/character/furina-sprite.webp' },
-    { key: 'mavuika-sprite', path: 'assets/images/cards/character/mavuika-sprite.webp' },
-    { key: 'nahida-sprite', path: 'assets/images/cards/character/nahida-sprite.webp' },
-    { key: 'raiden-sprite', path: 'assets/images/cards/character/raiden-sprite.webp' },
-    { key: 'venti-sprite', path: 'assets/images/cards/character/venti-sprite.webp' },
-    { key: 'zhongli-sprite', path: 'assets/images/cards/character/zhongli-sprite.webp' },
-
     { key: 'eula', path: 'assets/images/cards/character/eula.webp' },
     { key: 'furina', path: 'assets/images/cards/character/furina.webp' },
     { key: 'mavuika', path: 'assets/images/cards/character/mavuika.webp' },
     { key: 'nahida', path: 'assets/images/cards/character/nahida.webp' },
     { key: 'raiden', path: 'assets/images/cards/character/raiden.webp' },
     { key: 'venti', path: 'assets/images/cards/character/venti.webp' },
-    { key: 'zhongli', path: 'assets/images/cards/character/zhongli.webp' }
-    // { key: 'unlock-furina', path: 'assets/images/cards/character/unlockFurina.webp' },
-    // { key: 'unlock-mavuika', path: 'assets/images/cards/character/unlockMavuika.webp' },
-    // { key: 'unlock-nahida', path: 'assets/images/cards/character/unlockNahida.webp' },
-    // { key: 'unlock-raiden', path: 'assets/images/cards/character/unlockRaiden.webp' },
-    // { key: 'unlock-venti', path: 'assets/images/cards/character/unlockVenti.webp' },
-    // { key: 'unlock-zhongli', path: 'assets/images/cards/character/unlockZhongli.webp' }
+    { key: 'zhongli', path: 'assets/images/cards/character/zhongli.webp' },
+    { key: 'unlock-furina', path: 'assets/images/cards/character/unlockFurina.webp' },
+    { key: 'unlock-mavuika', path: 'assets/images/cards/character/unlockMavuika.webp' },
+    { key: 'unlock-nahida', path: 'assets/images/cards/character/unlockNahida.webp' },
+    { key: 'unlock-raiden', path: 'assets/images/cards/character/unlockRaiden.webp' },
+    { key: 'unlock-venti', path: 'assets/images/cards/character/unlockVenti.webp' },
+    { key: 'unlock-zhongli', path: 'assets/images/cards/character/unlockZhongli.webp' }
 ];
+
+// Character sprite cards
+export const CHARACTER_SPRITE_ASSETS = [
+    { key: 'eula-sprite', path: 'assets/images/cards/character-sprite/eula.webp' },
+    { key: 'furina-sprite', path: 'assets/images/cards/character-sprite/furina.webp' },
+    { key: 'mavuika-sprite', path: 'assets/images/cards/character-sprite/mavuika.webp' },
+    { key: 'nahida-sprite', path: 'assets/images/cards/character-sprite/nahida.webp' },
+    { key: 'raiden-sprite', path: 'assets/images/cards/character-sprite/raiden.webp' },
+    { key: 'venti-sprite', path: 'assets/images/cards/character-sprite/venti.webp' },
+    { key: 'zhongli-sprite', path: 'assets/images/cards/character-sprite/zhongli.webp' }
+];
+
 
 // Weapon cards - Sword
 export const WEAPON_SWORD_ASSETS = [
-
-    // { key: 'sword-foliar-incision', path: 'assets/images/cards/weapon/sword/foliar-incision.webp' },
-    // { key: 'sword-favonius', path: 'assets/images/cards/weapon/sword/favonius.webp' },
-    // { key: 'sword-aquila', path: 'assets/images/cards/weapon/sword/aquila.webp' },
     { key: 'sword-steampunk', path: 'assets/images/cards/weapon/sword/steampunk.webp' },
     { key: 'sword-forest', path: 'assets/images/cards/weapon/sword/forest.webp' },
     { key: 'sword-skyward', path: 'assets/images/cards/weapon/sword/skyward.webp' },
     { key: 'sword-sacrificial', path: 'assets/images/cards/weapon/sword/sacrificial.webp' },
     { key: 'sword-traveler', path: 'assets/images/cards/weapon/sword/traveler.webp' },
-    { key: 'sword-splendor', path: 'assets/images/cards/weapon/sword/splendor.webp' }
+    { key: 'sword-splendor', path: 'assets/images/cards/weapon/sword/splendor.webp' },
+    { key: 'sword-foliar-incision', path: 'assets/images/cards/weapon/sword/foliar-incision.webp' },
+    { key: 'sword-favonius', path: 'assets/images/cards/weapon/sword/favonius.webp' },
+    { key: 'sword-aquila', path: 'assets/images/cards/weapon/sword/aquila.webp' },
 ];
 
 // Weapon cards - Polearm
 export const WEAPON_POLEARM_ASSETS = [
     { key: 'polearm-steampunk', path: 'assets/images/cards/weapon/polearm/steampunk.webp' },
-    // { key: 'polearm-rightful', path: 'assets/images/cards/weapon/polearm/rightful.webp' },
-    // { key: 'polearm-jade', path: 'assets/images/cards/weapon/polearm/jade.webp' },
     { key: 'polearm-forest', path: 'assets/images/cards/weapon/polearm/forest.webp' },
     { key: 'polearm-skyward', path: 'assets/images/cards/weapon/polearm/skyward.webp' },
-    // { key: 'polearm-lithic', path: 'assets/images/cards/weapon/polearm/lithic.webp' },
     { key: 'polearm-engulfing-lightning', path: 'assets/images/cards/weapon/polearm/engulfing-lightning.webp' },
     { key: 'polearm-tassel', path: 'assets/images/cards/weapon/polearm/tassel.webp' },
-    { key: 'polearm-vanquisher', path: 'assets/images/cards/weapon/polearm/vanquisher.webp' }
+    { key: 'polearm-vanquisher', path: 'assets/images/cards/weapon/polearm/vanquisher.webp' },
+    { key: 'polearm-rightful', path: 'assets/images/cards/weapon/polearm/rightful.webp' },
+    { key: 'polearm-jade', path: 'assets/images/cards/weapon/polearm/jade.webp' },
+    { key: 'polearm-lithic', path: 'assets/images/cards/weapon/polearm/lithic.webp' }
 ];
 
 // Weapon cards - Claymore
 export const WEAPON_CLAYMORE_ASSETS = [
     { key: 'claymore-steampunk', path: 'assets/images/cards/weapon/claymore/steampunk.webp' },
-    // { key: 'claymore-overlord', path: 'assets/images/cards/weapon/claymore/overlord.webp' },
     { key: 'claymore-forest', path: 'assets/images/cards/weapon/claymore/forest.webp' },
-    // { key: 'claymore-beacon', path: 'assets/images/cards/weapon/claymore/beacon.webp' },
-    // { key: 'claymore-bell', path: 'assets/images/cards/weapon/claymore/bell.webp' },
     { key: 'claymore-skyward', path: 'assets/images/cards/weapon/claymore/skyward.webp' },
     { key: 'claymore-sacrificial', path: 'assets/images/cards/weapon/claymore/sacrificial.webp' },
-    // { key: 'claymore-gravestone', path: 'assets/images/cards/weapon/claymore/gravestone.webp' },
-    { key: 'claymore-iron', path: 'assets/images/cards/weapon/claymore/iron.webp' }
+    { key: 'claymore-iron', path: 'assets/images/cards/weapon/claymore/iron.webp' },
+    { key: 'claymore-overlord', path: 'assets/images/cards/weapon/claymore/overlord.webp' },
+    { key: 'claymore-gravestone', path: 'assets/images/cards/weapon/claymore/gravestone.webp' },
+    { key: 'claymore-beacon', path: 'assets/images/cards/weapon/claymore/beacon.webp' },
+    { key: 'claymore-bell', path: 'assets/images/cards/weapon/claymore/bell.webp' },
 ];
 
 // Weapon cards - Catalyst
 export const WEAPON_CATALYST_ASSETS = [
-    // { key: 'catalyst-flowing-purity', path: 'assets/images/cards/weapon/catalyst/flowing-purity.webp' },
     { key: 'catalyst-steampunk', path: 'assets/images/cards/weapon/catalyst/steampunk.webp' },
-    // { key: 'catalyst-eternal-flow', path: 'assets/images/cards/weapon/catalyst/eternal-flow.webp' },
-    // { key: 'catalyst-remembrance', path: 'assets/images/cards/weapon/catalyst/remembrance.webp' },
-    // { key: 'catalyst-sacred-winds', path: 'assets/images/cards/weapon/catalyst/sacred-winds.webp' },
     { key: 'catalyst-forest', path: 'assets/images/cards/weapon/catalyst/forest.webp' },
     { key: 'catalyst-skyward', path: 'assets/images/cards/weapon/catalyst/skyward.webp' },
     { key: 'catalyst-sacrificial', path: 'assets/images/cards/weapon/catalyst/sacrificial.webp' },
     { key: 'catalyst-dreams', path: 'assets/images/cards/weapon/catalyst/dreams.webp' },
-    { key: 'catalyst-magic-guide', path: 'assets/images/cards/weapon/catalyst/magic-guide.webp' }
+    { key: 'catalyst-magic-guide', path: 'assets/images/cards/weapon/catalyst/magic-guide.webp' },
+    { key: 'catalyst-flowing-purity', path: 'assets/images/cards/weapon/catalyst/flowing-purity.webp' },
+    { key: 'catalyst-eternal-flow', path: 'assets/images/cards/weapon/catalyst/eternal-flow.webp' },
+    { key: 'catalyst-remembrance', path: 'assets/images/cards/weapon/catalyst/remembrance.webp' },
+    { key: 'catalyst-sacred-winds', path: 'assets/images/cards/weapon/catalyst/sacred-winds.webp' }
+
 ];
 
 // Weapon cards - Bow
 export const WEAPON_BOW_ASSETS = [
-    // { key: 'bow-simulacra', path: 'assets/images/cards/weapon/bow/simulacra.webp' },
-    // { key: 'bow-fish', path: 'assets/images/cards/weapon/bow/fish.webp' },
+
     { key: 'bow-forest', path: 'assets/images/cards/weapon/bow/forest.webp' },
     { key: 'bow-elegy', path: 'assets/images/cards/weapon/bow/elegy.webp' },
-    // { key: 'bow-amos', path: 'assets/images/cards/weapon/bow/amos.webp' },
     { key: 'bow-skyward', path: 'assets/images/cards/weapon/bow/skyward.webp' },
     { key: 'bow-sacrificial', path: 'assets/images/cards/weapon/bow/sacrificial.webp' },
-    { key: 'bow-raven', path: 'assets/images/cards/weapon/bow/raven.webp' }
+    { key: 'bow-raven', path: 'assets/images/cards/weapon/bow/raven.webp' },
+    { key: 'bow-amos', path: 'assets/images/cards/weapon/bow/amos.webp' },
+    { key: 'bow-simulacra', path: 'assets/images/cards/weapon/bow/simulacra.webp' },
+    { key: 'bow-fish', path: 'assets/images/cards/weapon/bow/fish.webp' }
+];
+
+// Weapon badge - Sword
+export const WEAPON_SWORD_BADGE_ASSETS = [
+    { key: 'sword-traveler-badge', path: 'assets/images/badge/sword/traveler.webp' },
+    { key: 'sword-steampunk-badge', path: 'assets/images/badge/sword/steampunk.webp' },
+    { key: 'sword-forest-badge', path: 'assets/images/badge/sword/forest.webp' },
+    { key: 'sword-sacrificial-badge', path: 'assets/images/badge/sword/sacrificial.webp' },
+    { key: 'sword-favonius-badge', path: 'assets/images/badge/sword/favonius.webp' },
+    { key: 'sword-splendor-badge', path: 'assets/images/badge/sword/splendor.webp' },
+    { key: 'sword-foliar-incision-badge', path: 'assets/images/badge/sword/foliar-incision.webp' },
+    { key: 'sword-skyward-badge', path: 'assets/images/badge/sword/skyward.webp' },
+    { key: 'sword-aquila-badge', path: 'assets/images/badge/sword/aquila.webp' }
+];
+
+// Weapon badge - Catalyst
+export const WEAPON_CATALYST_BADGE_ASSETS = [
+    { key: 'catalyst-magic-guide-badge', path: 'assets/images/badge/catalyst/magic-guide.webp' },
+    { key: 'catalyst-flowing-purity-badge', path: 'assets/images/badge/catalyst/flowing-purity.webp' },
+    { key: 'catalyst-forest-badge', path: 'assets/images/badge/catalyst/forest.webp' },
+    { key: 'catalyst-sacrificial-badge', path: 'assets/images/badge/catalyst/sacrificial.webp' },
+    { key: 'catalyst-eternal-flow-badge', path: 'assets/images/badge/catalyst/eternal-flow.webp' },
+    { key: 'catalyst-steampunk-badge', path: 'assets/images/badge/catalyst/steampunk.webp' },
+    { key: 'catalyst-remembrance-badge', path: 'assets/images/badge/catalyst/remembrance.webp' },
+    { key: 'catalyst-dreams-badge', path: 'assets/images/badge/catalyst/dreams.webp' },
+    { key: 'catalyst-sacred-winds-badge', path: 'assets/images/badge/catalyst/sacred-winds.webp' },
+    { key: 'catalyst-skyward-badge', path: 'assets/images/badge/catalyst/skyward.webp' }
+];
+
+// Weapon badge - Claymore
+export const WEAPON_CLAYMORE_BADGE_ASSETS = [
+    { key: 'claymore-steampunk-badge', path: 'assets/images/badge/claymore/steampunk.webp' },
+    { key: 'claymore-forest-badge', path: 'assets/images/badge/claymore/forest.webp' },
+    { key: 'claymore-skyward-badge', path: 'assets/images/badge/claymore/skyward.webp' },
+    { key: 'claymore-sacrificial-badge', path: 'assets/images/badge/claymore/sacrificial.webp' },
+    { key: 'claymore-iron-badge', path: 'assets/images/badge/claymore/iron.webp' },
+    { key: 'claymore-overlord-badge', path: 'assets/images/badge/claymore/overlord.webp' },
+    { key: 'claymore-bell-badge', path: 'assets/images/badge/claymore/bell.webp' },
+    { key: 'claymore-beacon-badge', path: 'assets/images/badge/claymore/beacon.webp' },
+    { key: 'claymore-gravestone-badge', path: 'assets/images/badge/claymore/gravestone.webp' }
+];
+
+// Weapon badge - Polearm
+export const WEAPON_POLEARM_BADGE_ASSETS = [
+    { key: 'polearm-steampunk-badge', path: 'assets/images/badge/polearm/steampunk.webp' },
+    { key: 'polearm-forest-badge', path: 'assets/images/badge/polearm/forest.webp' },
+    { key: 'polearm-skyward-badge', path: 'assets/images/badge/polearm/skyward.webp' },
+    { key: 'polearm-engulfing-lightning-badge', path: 'assets/images/badge/polearm/engulfing-lightning.webp' },
+    { key: 'polearm-tassel-badge', path: 'assets/images/badge/polearm/tassel.webp' },
+    { key: 'polearm-vanquisher-badge', path: 'assets/images/badge/polearm/vanquisher.webp' },
+    { key: 'polearm-rightful-badge', path: 'assets/images/badge/polearm/rightful.webp' },
+    { key: 'polearm-lithic-badge', path: 'assets/images/badge/polearm/lithic.webp' },
+    { key: 'polearm-jade-badge', path: 'assets/images/badge/polearm/jade.webp' }
+];
+
+// Weapon badge - Bow
+export const WEAPON_BOW_BADGE_ASSETS = [
+    { key: 'bow-forest-badge', path: 'assets/images/badge/bow/forest.webp' },
+    { key: 'bow-elegy-badge', path: 'assets/images/badge/bow/elegy.webp' },
+    { key: 'bow-skyward-badge', path: 'assets/images/badge/bow/skyward.webp' },
+    { key: 'bow-sacrificial-badge', path: 'assets/images/badge/bow/sacrificial.webp' },
+    { key: 'bow-raven-badge', path: 'assets/images/badge/bow/raven.webp' },
+    { key: 'bow-amos-badge', path: 'assets/images/badge/bow/amos.webp' },
+    { key: 'bow-simulacra-badge', path: 'assets/images/badge/bow/simulacra.webp' },
+    { key: 'bow-fish-badge', path: 'assets/images/badge/bow/fish.webp' }
 ];
 
 // Enemy cards - Hilichurl
@@ -253,19 +336,21 @@ export const FOOD_ASSETS = [
 export const TRAP_ASSETS = [
     { key: 'breathe-fire', path: 'assets/images/cards/trap/breathe-fire.webp' },
     { key: 'quicksand', path: 'assets/images/cards/trap/quicksand.webp' },
-    { key: 'abyss-call', path: 'assets/images/cards/trap/abyss-call.webp' }
+    { key: 'abyss-call', path: 'assets/images/cards/trap/abyss-call.webp' },
+    { key: 'spike', path: 'assets/images/cards/trap/spike.webp' }
 ];
 
 // Treasure cards
 export const TREASURE_ASSETS = [
     { key: 'bribery', path: 'assets/images/cards/treasure/bribery.webp' },
     { key: 'gold-mine', path: 'assets/images/cards/treasure/gold-mine.webp' },
-    { key: 'chest', path: 'assets/images/cards/treasure/chest.webp' }
+    { key: 'chest', path: 'assets/images/cards/treasure/chest.webp' },
 ];
 
 // Bomb cards
 export const BOMB_ASSETS = [
-    { key: 'explosive', path: 'assets/images/cards/bomb/explosive.webp' }
+    { key: 'explosive', path: 'assets/images/cards/bomb/explosive.webp' },
+    { key: 'scare', path: 'assets/images/cards/bomb/scare.webp' }
 ];
 
 // Empty card
@@ -275,19 +360,29 @@ export const EMPTY_CARD = [
 
 // Item assets
 export const ITEM_ASSETS = [
-    { key: 'equipment-slot', path: 'assets/images/ui/equipment-slot.webp' },
+    { key: 'healing-potion', path: 'assets/images/item/healing-potion.webp' },
     { key: 'black-hole', path: 'assets/images/item/black-hole.webp' },
     { key: 'catalyst', path: 'assets/images/item/catalyst.webp' },
     { key: 'claw', path: 'assets/images/item/claw.webp' },
     { key: 'cooldown', path: 'assets/images/item/cooldown.webp' },
     { key: 'corruption', path: 'assets/images/item/corruption.webp' },
-    { key: 'healing-potion', path: 'assets/images/item/healing-potion.webp' },
     { key: 'refinement', path: 'assets/images/item/refinement.webp' },
     { key: 'repair', path: 'assets/images/item/repair.webp' },
     { key: 'seasoning', path: 'assets/images/item/seasoning.webp' },
     { key: 'sword', path: 'assets/images/item/sword.webp' },
     { key: 'tax-waiver', path: 'assets/images/item/tax-waiver.webp' },
-    { key: 'toxic', path: 'assets/images/item/toxic.webp' }
+    { key: 'toxic', path: 'assets/images/item/toxic.webp' },
+    { key: 'compass', path: 'assets/images/ui/compass.webp' },
+    { key: 'library', path: 'assets/images/ui/library.webp' },
+    { key: 'equip', path: 'assets/images/ui/equip.webp' },
+    { key: 'fontaine', path: 'assets/images/ui/fontaine.webp' },
+    { key: 'inazuma', path: 'assets/images/ui/inazuma.webp' },
+    { key: 'liyue', path: 'assets/images/ui/liyue.webp' },
+    { key: 'mondstadt', path: 'assets/images/ui/mondstadt.webp' },
+    { key: 'natlan', path: 'assets/images/ui/natlan.webp' },
+    { key: 'nod-krai', path: 'assets/images/ui/nod-krai.webp' },
+    { key: 'sumeru', path: 'assets/images/ui/sumeru.webp' },
+    { key: 'equipment-slot', path: 'assets/images/ui/equipment-slot.webp' }
 ];
 
 // Element assets
@@ -301,10 +396,16 @@ export const ELEMENT_ASSETS = [
     { key: 'element-geo', path: 'assets/images/element/geo.webp' }
 ];
 
-// UI Elements
-export const UI_ASSETS = [
+// Background Elements
+export const BACKGROUND_ASSETS = [
     { key: 'background', path: 'assets/images/ui/background.webp' },
-    { key: 'compass', path: 'assets/images/ui/compass.webp' },
-    { key: 'library', path: 'assets/images/ui/library.webp' },
-    { key: 'equip', path: 'assets/images/ui/equip.webp' }
+    // { key: 'background-fontaine', path: 'assets/images/ui/background-fontaine.webp' },
+    // { key: 'background-inazuma', path: 'assets/images/ui/background-inazuma.webp' },
+    // { key: 'background-liyue', path: 'assets/images/ui/background-liyue.webp' },
+    // { key: 'background-mondstadt', path: 'assets/images/ui/background-mondstadt.webp' },
+    // { key: 'background-natlan', path: 'assets/images/ui/background-natlan.webp' },
+    // { key: 'background-nod-krai', path: 'assets/images/ui/background-nod-krai.webp' },
+    // { key: 'background-sumeru', path: 'assets/images/ui/background-sumeru.webp' }
 ];
+
+

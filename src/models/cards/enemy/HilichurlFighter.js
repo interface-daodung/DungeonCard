@@ -1,15 +1,16 @@
 // HilichurlFighter.js - Thẻ enemy Hilichurl Fighter
 // Chức năng: Enemy cơ bản có thể tấn công người chơi
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class HilichurlFighter extends Card {
+export default class HilichurlFighter extends Enemy {
     static DEFAULT = {
         id: 'fighter',
         name: 'Hilichurl Fighter',
         element: 'physical',
         type: 'enemy',
         description: 'Hilichurl Fighter - Kẻ địch cơ bản có thể tấn công người chơi.',
+        clan: 'hilichurl',
         rarity: 4
     }
     constructor(scene, x, y, index) {

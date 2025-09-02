@@ -1,15 +1,16 @@
 // RockShieldwall.js - Thẻ enemy Hilichurl Rock Shieldwall
 // Chức năng: Enemy tường đá, có khả năng phòng thủ rất cao và chống đỡ tốt
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class RockShieldwall extends Card {
+export default class RockShieldwall extends Enemy {
     static DEFAULT = {
         id: 'rock-shieldwall',
         name: 'Rock Shieldwall',
         element: 'geo',
         type: 'enemy',
         description: 'Rock Shieldwall - Kẻ địch tường đá, có khả năng phòng thủ rất cao và chống đỡ tốt.',
+        clan: 'hilichurl',
         rarity: 4
     }
     constructor(scene, x, y, index) {

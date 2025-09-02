@@ -1,15 +1,16 @@
 // DendroSamachurl.js - Thẻ enemy Hilichurl Dendro Samachurl
 // Chức năng: Enemy caster thảo có thể tạo cây và gây poison
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class DendroSamachurl extends Card {
+export default class DendroSamachurl extends Enemy {
     static DEFAULT = {
         id: 'dendro-samachurl',
         name: 'Dendro Samachurl',
         element: 'dendro',
         type: 'enemy',
         description: 'Dendro Samachurl - Kẻ địch caster thảo có thể tạo cây và gây poison.',
+        clan: 'hilichurl',
         rarity: 3
     }
     constructor(scene, x, y, index) {

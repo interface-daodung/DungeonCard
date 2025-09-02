@@ -1,21 +1,23 @@
-import MoveCardManager from './MoveCardManager.js';
+import CalculatePositionCard from '../utils/CalculatePositionCard.js';
 import CardManager from './CardManager.js';
 import AnimationManager from './AnimationManager.js';
-import dungeonList from '../data/dungeonList.json';
+import PriorityEmitter from '../utils/PriorityEmitter.js';
+
+// Khởi tạo instance
+
 
 export default class GameManager {
   constructor(scene) {
     this.scene = scene;
     this.coin = 0;
-
+    this.OnCompleteMoveCount = 0;
     // Khởi tạo highScores object từ localStorage
     this.highScore = this.getHighScore();
 
     // Tạo CardManager mới cho mỗi game session
     this.cardManager = new CardManager(scene);
 
-    // Tạo MoveCardManager để quản lý việc di chuyển thẻ
-    this.moveCardManager = new MoveCardManager();
+    this.emitter = new PriorityEmitter();
 
     // Tạo AnimationManager để quản lý animation (sẽ được khởi tạo với scene sau)
     this.animationManager = new AnimationManager(scene);
@@ -29,60 +31,41 @@ export default class GameManager {
   moveCharacter(index) {
 
     // Nếu đang xử lý animation thì không di chuyển
-    if (this.animationManager.isProcessing) {
+    if (this.animationManager.isProcessing || this.OnCompleteMoveCount !== 0) {
       return;
     }
 
-
-    // Disable tất cả card ngay lập tức để tránh race condition
-    this.cardManager.disableAllCards();
-
     const characterIndex = this.cardManager.getCharacterIndex();
-    if (this.moveCardManager.isValidMove(characterIndex, index)) {
-      const movement = this.moveCardManager.calculateMovement(characterIndex, index);
-      //console.log('movement', movement);
+
+    if (CalculatePositionCard.isValidMove(characterIndex, index)) {
 
       if (this.cardManager.getCard(index).CardEffect()) {
-        this.cardManager.enableAllCards();
+
+        // Emit event completeMove để tất cả card có thể xử lý
+        this.emitter.emit('completeMove');
         return;
       }
+
+      const movement = CalculatePositionCard.calculateMovement(characterIndex, index);
 
       // hủy card cũ ở vị trí index
       this.cardManager.getCard(index).ProgressDestroy();
 
-      this.animationManager.executeMoveAnimation(movement, () => {
-        console.log('moveCharacter completed');
+      this.animationManager.startMoveAnimation(movement, () => {
+
         movement.forEach(move => {
           // Sử dụng hàm moveCard an toàn từ CardManager
           this.cardManager.moveCard(move.from, move.to);
         });
 
         // Tạo card mới ở vị trí cuối của movement
-        if (movement.length > 0) {
-          const lastMove = movement[movement.length - 1];
-          const fromIndex = lastMove.from;
-
-          // Lấy tọa độ của vị trí cũ để tạo card mới
-          const coords = this.cardManager.getGridPositionCoordinates(fromIndex);
-          if (coords) {
-            // Tạo card mới sử dụng CardFactory
-            const newCard = this.cardManager.cardFactory.createRandomCard(this.scene, coords.x, coords.y, fromIndex);
-            // Thêm card mới vào vị trí cũ
-            this.cardManager.addCard(newCard, fromIndex);
-            // Gọi processCreation để có hiệu ứng fade in
-            if (newCard.processCreation) {
-              newCard.processCreation();
-            }
-          }
-        }
-
-        // Enable lại tất cả card sau khi hoàn thành
-        this.cardManager.enableAllCards();
+        const newCardIndex = movement[movement.length - 1].from;
+        const newCard = this.cardManager.cardFactory.createRandomCard(this.scene, newCardIndex);
+        this.cardManager.addCard(newCard, newCardIndex).processCreation();
+        // Emit event completeMove để tất cả card có thể xử lý
+        this.emitter.emit('completeMove');
       });
 
-    } else {
-      // Nếu không thể di chuyển, enable lại tất cả card
-      this.cardManager.enableAllCards();
     }
   }
 
@@ -151,14 +134,14 @@ export default class GameManager {
 
   gameOver() {
     console.log('gameover!');
-    
+
     // Lấy tên character hiện tại
     const characterName = this.cardManager.CardCharacter?.constructor?.DEFAULT?.id;
-    
+
     if (characterName) {
       // Lấy characterHighScore từ localStorage
       let characterHighScores = JSON.parse(localStorage.getItem('characterHighScores')) || {};
-      
+
       // Kiểm tra và cập nhật highScore cho character
       if (!characterHighScores[characterName] || this.coin > characterHighScores[characterName]) {
         characterHighScores[characterName] = this.coin;
@@ -166,7 +149,7 @@ export default class GameManager {
         console.log(`GameManager: New character high score for ${characterName}: ${this.coin}`);
       }
     }
-    
+
     // Kiểm tra và cập nhật highScore cho stage hiện tại
     if (this.coin > this.highScore) {
       this.setHighScore(this.coin);
@@ -174,69 +157,48 @@ export default class GameManager {
       console.log(`GameManager: New high score for ${this.scene.stageId}: ${this.coin}`);
     }
 
-    // Lấy danh sách tất cả thẻ
-    const allCards = this.cardManager.getAllCards();
- 
+    // Cộng dồn coin vào totalCoin trong localStorage
+    const currentTotalCoin = parseInt(localStorage.getItem('totalCoin')) || 0;
+    const newTotalCoin = currentTotalCoin + this.coin;
+    localStorage.setItem('totalCoin', newTotalCoin);
+
     // Destroy từng thẻ một cách tuần tự với delay 200ms
-    let currentIndex = 0;
-    
-    const destroyNextCard = () => {
-      if (currentIndex >= allCards.length) {
-        // Đã destroy hết thẻ, hiển thị dialog game over
+
+    this.animationManager.startGameOverAnimation(CalculatePositionCard.
+      shuffleArray(this.cardManager.getAllCards()), () => {
         this.showGameOverDialog();
-        return;
-      }
-//animation destroy card
+      });
 
-
-
-
-
-
-      const card = allCards[currentIndex];
-      if (card && card.ProgressDestroy) {
-        card.ProgressDestroy();
-        console.log(`GameManager: Destroying card ${card.name || card.type} at index ${currentIndex}`);
-      }
-      
-      currentIndex++;
-      
-      // Lặp lại sau 200ms
-      setTimeout(destroyNextCard, 200);
-    };
-
-    // Bắt đầu destroy thẻ
-    destroyNextCard();
   }
 
   /**
    * Hiển thị dialog game over
    */
   showGameOverDialog() {
-    console.log('GameManager: Showing game over dialog');
-    
     // Tạo dialog game over
     const dialog = this.scene.add.container(0, 0);
-    
-    // Background mờ
-    const background = this.scene.add.graphics();
-    background.fillStyle(0x000000, 0.7);
-    background.fillRect(0, 0, this.scene.cameras.main.width, this.scene.cameras.main.height);
+
+    // Sử dụng scene.scale để lấy kích thước màn hình
+    const { width, height } = this.scene.scale;
+
+    // Tạo background mờ - đặt ở vị trí (0,0) để che toàn bộ màn hình
+    const background = this.scene.add.rectangle(0, 0, width, height, 0x000000, 0.8)
+      .setOrigin(0, 0)
+      .setInteractive();
     dialog.add(background);
-    
-    // Container chính cho dialog
-    const dialogContainer = this.scene.add.container(0, 0);
-    dialogContainer.setPosition(this.scene.cameras.main.width / 2, this.scene.cameras.main.height / 2);
-    
-    // Background cho dialog
+
+    // Container chính cho dialog - đặt ở giữa màn hình
+    const dialogContainer = this.scene.add.container(width / 2, height / 2);
+
+    // Background cho dialog với màu chủ đề mới
     const dialogBg = this.scene.add.graphics();
-    dialogBg.fillStyle(0x2c3e50, 0.95);
-    dialogBg.lineStyle(3, 0xecf0f1, 1);
+    dialogBg.fillStyle(0x1f0614, 0.95);
+    dialogBg.lineStyle(3, 0x622945, 1);
     dialogBg.fillRoundedRect(-200, -150, 400, 300, 20);
     dialogBg.strokeRoundedRect(-200, -150, 400, 300, 20);
     dialogContainer.add(dialogBg);
-    
-    // Tiêu đề
+
+    // Tiêu đề với màu chữ tương phản cao
     const title = this.scene.add.text(0, -100, 'GAME OVER', {
       fontSize: '32px',
       fill: '#e74c3c',
@@ -245,26 +207,26 @@ export default class GameManager {
     });
     title.setOrigin(0.5);
     dialogContainer.add(title);
-    
-    // Thông tin điểm số
-    const scoreText = this.scene.add.text(0, -50, `Score: ${this.coin}`, {
+
+    // Thông tin điểm số với màu chữ tương phản
+    const scoreText = this.scene.add.text(0, -50, `Coin: ${this.coin}`, {
       fontSize: '24px',
-      fill: '#ecf0f1',
+      fill: '#cbbd1b',
       fontFamily: 'Arial, sans-serif'
     });
     scoreText.setOrigin(0.5);
     dialogContainer.add(scoreText);
-    
-    // High score
+
+    // High score với màu chữ tương phản
     const highScoreText = this.scene.add.text(0, -10, `High Score: ${this.highScore}`, {
       fontSize: '20px',
-      fill: '#f39c12',
+      fill: '#e0e0e0',
       fontFamily: 'Arial, sans-serif'
     });
     highScoreText.setOrigin(0.5);
     dialogContainer.add(highScoreText);
-    
-    // Nút Restart
+
+    // Nút Restart với màu chữ tương phản
     const restartButton = this.scene.add.text(0, 50, 'Restart', {
       fontSize: '24px',
       fill: '#2ecc71',
@@ -278,17 +240,17 @@ export default class GameManager {
       dialog.destroy();
     });
     restartButton.on('pointerover', () => {
-      restartButton.setStyle({ fill: '#27ae60' });
+      restartButton.setTint(0xd1d1d1);
     });
     restartButton.on('pointerout', () => {
-      restartButton.setStyle({ fill: '#2ecc71' });
+      restartButton.clearTint();
     });
     dialogContainer.add(restartButton);
-    
-    // Nút Menu
+
+    // Nút Menu với màu chữ tương phản
     const menuButton = this.scene.add.text(0, 100, 'Menu', {
       fontSize: '24px',
-      fill: '#3498db',
+      fill: '#f0f0f0',
       fontFamily: 'Arial, sans-serif',
       fontStyle: 'bold'
     });
@@ -299,18 +261,18 @@ export default class GameManager {
       dialog.destroy();
     });
     menuButton.on('pointerover', () => {
-      menuButton.setStyle({ fill: '#2980b9' });
+      menuButton.setTint(0xd1d1d1);
     });
     menuButton.on('pointerout', () => {
-      menuButton.setStyle({ fill: '#3498db' });
+      menuButton.clearTint();
     });
     dialogContainer.add(menuButton);
-    
+
     // Thêm vào scene
     dialog.add(dialogContainer);
     this.scene.add.existing(dialog);
-    
+
     // Làm cho dialog có thể tương tác
-    dialog.setDepth(1000);
+    dialog.setDepth(100);
   }
 }

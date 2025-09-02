@@ -1,11 +1,5 @@
 import Phaser from 'phaser';
-import { enemy } from './patternMixinCard/enemy.js';
-import { food } from './patternMixinCard/food.js';
-import { weapon } from './patternMixinCard/weapon.js';
-import { trap } from './patternMixinCard/trap.js';
-import { treasure } from './patternMixinCard/treasure.js';
-import { character } from './patternMixinCard/character.js';
-import { bomb } from './patternMixinCard/bomb.js';
+import { SpritesheetWrapper } from '../utils/SpritesheetWrapper.js';
 
 export default class Card extends Phaser.GameObjects.Container {
     constructor(scene, x, y, index, name, nameId, type) {
@@ -21,27 +15,19 @@ export default class Card extends Phaser.GameObjects.Container {
         // Biến để lưu trữ dialog
         this.cardInfoDialog = null;
 
-        // Áp dụng mixin logic dựa trên type
-        if (type === "enemy") {
-            Object.assign(this, enemy);
-        } else if (type === "food") {
-            Object.assign(this, food);
-        } else if (type === "weapon") {
-            Object.assign(this, weapon);
-        } else if (type === "trap") {
-            Object.assign(this, trap);
-        } else if (type === "treasure") {
-            Object.assign(this, treasure);
-        } else if (type === "character") {
-            Object.assign(this, character);
-        } else if (type === "bomb") {
-            Object.assign(this, bomb);
-        }
+        // Danh sách các hàm unsubscribe để cleanup khi destroy
+        this.unsubscribeList = [];
     }
 
     createCard() {
         // Sử dụng ảnh thực tế cho card
-        this.cardImage = this.scene.add.image(0, 0, this.nameId); // Default image
+        let atlasKey = this.type;
+        if (this.type === 'weapon') {
+            atlasKey += '-' + this.constructor.DEFAULT.category;
+        } else if (this.type === 'enemy') {
+            atlasKey += '-' + this.constructor.DEFAULT.clan;
+        }
+        this.cardImage = this.scene.add.image(0, 0, atlasKey, this.nameId); // Default image
 
         // Tự động scale ảnh về 90x154
         this.cardImage.setDisplaySize(160, 274.3);
@@ -322,6 +308,11 @@ export default class Card extends Phaser.GameObjects.Container {
 
         this.add(display);
 
+        // Kiểm tra nếu text ban đầu là 0 thì ẩn display
+        if (parseInt(text) === 0) {
+            display.setVisible(false);
+        }
+
         // Trả về object chứa tất cả thành phần để dễ quản lý
         return {
             container: display,
@@ -330,6 +321,12 @@ export default class Card extends Phaser.GameObjects.Container {
             updateText: (newText) => {
                 if (textDisplay && textDisplay.setText) {
                     textDisplay.setText(newText.toString());
+                    // Kiểm tra nếu text mới là 0 thì ẩn display, ngược lại thì hiện
+                    if (parseInt(newText) === 0) {
+                        display.setVisible(false);
+                    } else {
+                        display.setVisible(true);
+                    }
                 }
             },
             updateColor: (newColor) => {
@@ -359,6 +356,20 @@ export default class Card extends Phaser.GameObjects.Container {
         console.log(`Card ${this.name} (${this.nameId}) đang chạy hiệu ứng...`);
     }
 
+    takeDamage(damage, type) {
+        console.log(`Card ${this.name} (${this.nameId}) bị tấn công ${damage} damage`);
+        if (type === 'Explosive') {
+            SpritesheetWrapper.animationBomb(this.scene, this.x, this.y);
+        } else if (type === 'BreatheFire') {
+            SpritesheetWrapper.animationBreatheFire(this.scene, this.x, this.y);
+        }
+    }
+
+    die() {
+        this.ProgressDestroy();
+        const newCard = this.scene.gameManager.cardManager.cardFactory.createRandomCard(this.scene, this.index);
+        this.scene.gameManager.cardManager.addCard(newCard, this.index).processCreation();
+    }
     /**
      * Tạo hiệu ứng chết trước khi destroy card
      * @param {Function} onComplete - Callback khi hiệu ứng chết hoàn thành
@@ -380,6 +391,17 @@ export default class Card extends Phaser.GameObjects.Container {
             duration: 300,
             ease: 'Power2',
             onComplete: () => {
+                // Chạy tất cả unsubscribe functions trước khi destroy
+                this.unsubscribeList.forEach(unsubscribe => {
+                    if (typeof unsubscribe === 'function') {
+                        try {
+                            unsubscribe();
+                        } catch (error) {
+                            console.warn(`Card ${this.name || this.nameId}: Lỗi khi unsubscribe:`, error);
+                        }
+                    }
+                });
+
                 this.destroy();
             }
         });

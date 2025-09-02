@@ -1,15 +1,16 @@
 // Blazing.js - Thẻ enemy Hilichurl Blazing
 // Chức năng: Enemy cháy liên tục, gây damage theo thời gian cho người chơi gần đó
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class Blazing extends Card {
+export default class Blazing extends Enemy {
     static DEFAULT = {
         id: 'blazing',
         name: 'Blazing',
         element: 'pyro',
         type: 'enemy',
         description: 'Blazing - Kẻ địch cháy liên tục, gây damage theo thời gian cho người chơi gần đó.',
+        clan: 'hilichurl',
         rarity: 3
     }
     constructor(scene, x, y, index) {

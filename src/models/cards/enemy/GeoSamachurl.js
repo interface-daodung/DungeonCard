@@ -1,15 +1,16 @@
 // GeoSamachurl.js - Thẻ enemy Hilichurl Geo Samachurl
 // Chức năng: Enemy caster địa có thể tạo tường và gây stun
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class GeoSamachurl extends Card {
+export default class GeoSamachurl extends Enemy {
     static DEFAULT = {
         id: 'geo-samachurl',
         name: 'Geo Samachurl',
         element: 'geo',
         type: 'enemy',
         description: 'Geo Samachurl - Kẻ địch caster địa có thể tạo tường và gây stun.',
+        clan: 'hilichurl',
         rarity: 3
     }
     constructor(scene, x, y, index) {

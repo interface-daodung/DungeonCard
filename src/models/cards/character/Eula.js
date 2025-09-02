@@ -1,9 +1,9 @@
 // Eula.js - Thẻ nhân vật Eula
 // Chức năng: Nhân vật người chơi điều khiển
 
-import Card from '../../../modules/Card.js';
+import Character from '../../../modules/typeCard/character.js';
 
-export default class Eula extends Card {
+export default class Eula extends Character  {
 
     static DEFAULT = {
         id: 'eula',
@@ -17,11 +17,10 @@ export default class Eula extends Card {
         super(scene, x, y, index,
             Eula.DEFAULT.name, Eula.DEFAULT.id, "character");
 
-        this.level = this.getLevel();
-        this.hp = this.getMaxHP(); // HP ban đầu  
+  
         this.element = Eula.DEFAULT.element; // Element 
         this.description = Eula.DEFAULT.description; // Mô tả
-        this.weapon = null; // vũ khí
+  
 
         this.createCard();
         scene.add.existing(this);

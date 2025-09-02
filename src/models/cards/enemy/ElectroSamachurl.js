@@ -1,15 +1,16 @@
 // ElectroSamachurl.js - Thẻ enemy Hilichurl Electro Samachurl
 // Chức năng: Enemy caster điện có thể gây shock và làm chậm người chơi
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class ElectroSamachurl extends Card {
+export default class ElectroSamachurl extends Enemy {
     static DEFAULT = {
         id: 'electro-samachurl',
         name: 'Electro Samachurl',
         element: 'electro',
         type: 'enemy',
         description: 'Electro Samachurl - Kẻ địch caster điện có thể gây shock và làm chậm người chơi.',
+        clan: 'hilichurl',
         rarity: 3
     }
     constructor(scene, x, y, index) {

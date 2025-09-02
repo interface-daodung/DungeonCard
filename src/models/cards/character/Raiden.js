@@ -1,9 +1,9 @@
 // Raiden.js - Thẻ nhân vật Raiden
 // Chức năng: Nhân vật người chơi điều khiển
 
-import Card from '../../../modules/Card.js';
+import Character from '../../../modules/typeCard/character.js';
 
-export default class Raiden extends Card {
+export default class Raiden extends Character {
 
     static DEFAULT = {
         id: 'raiden',
@@ -16,12 +16,10 @@ export default class Raiden extends Card {
     constructor(scene, x, y, index) {
         super(scene, x, y, index,
             Raiden.DEFAULT.name, Raiden.DEFAULT.id, "character");
-
-        this.level = this.getLevel();
-        this.hp = this.getMaxHP(); // HP ban đầu  
+ 
         this.element = Raiden.DEFAULT.element; // Element 
         this.description = Raiden.DEFAULT.description; // Mô tả
-        this.weapon = null; // vũ khí
+    
 
         this.createCard();
         scene.add.existing(this);

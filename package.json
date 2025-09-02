@@ -7,14 +7,19 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "gendata": "node tools/generateJson.js"
+    "gendata": "node tools/generateJson.js",
+    "gen-atlas": "node tools/generateAtlas.js",
+    "clone-equip": "node tools/cloneAndResizeEquip.js"
   },
   "devDependencies": {
     "vite": "^5.0.0"
   },
   "dependencies": {
+    "canvas": "^3.2.0",
+    "free-tex-packer-core": "^0.3.5",
     "jsdom": "^26.1.0",
     "phaser": "^3.70.0",
-    "phaser3-rex-plugins": "^1.80.16"
+    "phaser3-rex-plugins": "^1.80.16",
+    "sharp": "^0.34.3"
   }
 }

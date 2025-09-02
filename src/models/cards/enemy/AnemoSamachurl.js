@@ -1,9 +1,9 @@
 // AnemoSamachurl.js - Thẻ enemy Hilichurl Anemo Samachurl
 // Chức năng: Enemy caster gió có thể tạo gió và làm chậm người chơi
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class AnemoSamachurl extends Card {
+export default class AnemoSamachurl extends Enemy {
     
     static DEFAULT = {
         id: 'anemo-samachurl',
@@ -11,6 +11,7 @@ export default class AnemoSamachurl extends Card {
         element: 'anemo',
         type: 'enemy',
         description: 'Anemo Samachurl - Kẻ địch caster gió có thể tạo gió và làm chậm người chơi.',
+        clan: 'hilichurl',
         rarity: 3
     }
 

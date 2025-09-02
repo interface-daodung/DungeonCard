@@ -1,15 +1,16 @@
 // CryoShooter.js - Thẻ enemy Hilichurl Cryo Shooter
 // Chức năng: Enemy bắn băng từ xa, có thể làm chậm và đóng băng người chơi
 
-import Card from '../../../modules/Card.js';
+import Enemy from '../../../modules/typeCard/enemy.js';
 
-export default class CryoShooter extends Card {
+export default class CryoShooter extends Enemy {
     static DEFAULT = {
         id: 'cryo-shooter',
         name: 'Cryo Shooter',
         element: 'cryo',
         type: 'enemy',
         description: 'Cryo Shooter - Kẻ địch bắn băng từ xa, có thể làm chậm và đóng băng người chơi.',
+        clan: 'hilichurl',
         rarity: 2
     }
     constructor(scene, x, y, index) {
