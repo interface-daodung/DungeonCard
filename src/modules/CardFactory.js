@@ -82,61 +82,82 @@ class CardFactory {
             'zhongli': Zhongli,
         };
 
-        this.cardClasses = {
-            // Coin cards
-            'Coin': Coin,
+        this.cardClasses = {};
 
-            // Weapon cards
-            'SwordSteampunk': SwordSteampunk,
-            'SwordForest': SwordForest,
-            'SwordSkyward': SwordSkyward,
-            'SwordSplendor': SwordSplendor,
-            'SwordTraveler': SwordTraveler,
-            'SwordSacrificial': SwordSacrificial,
-
-            // Enemy cards - Hilichurl
-            'AnemoSamachurl': AnemoSamachurl,
-            'ElectroSamachurl': ElectroSamachurl,
-            'DendroSamachurl': DendroSamachurl,
-            'GeoSamachurl': GeoSamachurl,
-            'HydroSamachurl': HydroSamachurl,
-            'HilichurlFighter': HilichurlFighter,
-            'HilistrayWater': HilistrayWater,
-            'WoodenShieldwall': WoodenShieldwall,
-            'Lawachurl': Lawachurl,
-            'RockShieldwall': RockShieldwall,
-            'Berserker': Berserker,
-            'Blazing': Blazing,
-            'IceShieldwall': IceShieldwall,
-            'Shooter': Shooter,
-            'Crackling': Crackling,
-            'CryoShooter': CryoShooter,
-            'ElectroShooter': ElectroShooter,
-
-            // Food cards (thực tế có)
-            'LifeEssence': LifeEssence,
-            'MystiqueSoup': MystiqueSoup,
-            'Pizza': Pizza,
-            'RoastChicken': RoastChicken,
-            'Macarons': Macarons,
-
-            // Trap cards (thực tế có)
-            'AbyssCall': AbyssCall,
-            'BreatheFire': BreatheFire,
-            'Quicksand': Quicksand,
-
-            // Treasure cards (thực tế có)
-            'Chest': Chest,
-            'Bribery': Bribery,
-            'GoldMine': GoldMine,
-
-            // Bomb cards
-            'Explosive': Explosive,
-
-            // Empty cards
-            'Empty': Empty,
-
+        // Thêm method add để thêm các class vào cardClasses
+        this.cardClasses.add = function(classes) {
+            classes.forEach(cls => {
+                this[cls.name] = cls;
+            });
         };
+
+        // Coin cards
+        this.cardClasses.add([Coin]);
+
+        // Weapon cards
+        this.weaponClasses = [
+            SwordSteampunk,
+            SwordForest,
+            SwordSkyward,
+            SwordSplendor,
+            SwordTraveler,
+            SwordSacrificial
+        ];
+        this.cardClasses.add(this.weaponClasses);
+
+        // Enemy cards - Hilichurl
+        this.enemyClasses = [
+            AnemoSamachurl,
+            ElectroSamachurl,
+            DendroSamachurl,
+            GeoSamachurl,
+            HydroSamachurl,
+            HilichurlFighter,
+            HilistrayWater,
+            WoodenShieldwall,
+            Lawachurl,
+            RockShieldwall,
+            Berserker,
+            Blazing,
+            IceShieldwall,
+            Shooter,
+            Crackling,
+            CryoShooter,
+            ElectroShooter
+        ];
+        this.cardClasses.add(this.enemyClasses);
+
+        // Food cards
+        this.foodClasses = [
+            LifeEssence,
+            MystiqueSoup,
+            Pizza,
+            RoastChicken,
+            Macarons
+        ];
+        this.cardClasses.add(this.foodClasses);
+
+        // Trap cards
+        this.trapClasses = [
+            AbyssCall,
+            BreatheFire,
+            Quicksand
+        ];
+        this.cardClasses.add(this.trapClasses);
+
+        // Treasure cards
+        this.treasureClasses = [
+            Chest,
+            Bribery,
+            GoldMine
+        ];
+        this.cardClasses.add(this.treasureClasses);
+
+        // Bomb cards
+        this.cardClasses.add([Explosive]);
+
+        // Empty cards
+        this.cardClasses.add([Empty]);
 
         // Hệ thống Rarity-based với data từ dungeonList.json
         this.stageCardPools = {};

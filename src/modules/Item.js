@@ -14,6 +14,14 @@ class Item {
         this.maxLevel = maxLevel;
     }
 
+    effect(gameManager) {
+        this.gameManager = gameManager;
+        this.gameManager.animationManager.startItemAnimation(this.image, () => {
+            console.log(`Sử dụng item: ${this.nameId}`);
+        });
+        return false;
+    }
+
     /**
      * Lấy power theo level hiện tại
      * @returns {number} Power đã được tính toán theo level

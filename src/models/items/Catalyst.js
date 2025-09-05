@@ -9,8 +9,8 @@ export default class Catalyst extends Item {
             'Catalyst',
             'catalyst',
             'catalyst',
-            25,     // Power cơ bản
-            0,      // Cooldown cơ bản
+            10,     // Power cơ bản
+            10,      // Cooldown cơ bản
             'Tăng sức mạnh phép thuật',
             6       // Max level
         );
@@ -21,5 +21,18 @@ export default class Catalyst extends Item {
      */
     get power() {
         return this._power * (1 + this.level * 0.25); // Tăng 25% mỗi level
+    }
+
+    /**
+     * Ghi đè phương thức get effect để có logic riêng
+     */
+    effect(gameManager) {
+        gameManager.cardManager.CardCharacter.setWeapon({
+            default: gameManager.cardManager.cardFactory.weaponClasses[
+                Math.floor(Math.random() * 
+                gameManager.cardManager.cardFactory.weaponClasses.length)].DEFAULT,
+            durability: this.power
+        });
+        return true;
     }
 }

@@ -9,8 +9,8 @@ export default class Seasoning extends Item {
             'Seasoning',
             'seasoning',
             'seasoning',
-            0,      // Power cơ bản
-            0,      // Cooldown cơ bản
+            10,      // Power cơ bản
+            10,      // Cooldown cơ bản
             'Gia vị để tăng hiệu quả item',
             6       // Max level
         );

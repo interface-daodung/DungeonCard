@@ -9,8 +9,8 @@ export default class TaxWaiver extends Item {
             'Tax Waiver',
             'tax-waiver',
             'tax-waiver',
-            0,      // Power cơ bản
-            0,      // Cooldown cơ bản
+            10,      // Power cơ bản
+            10,      // Cooldown cơ bản
             'Miễn thuế cho item',
             5       // Max level
         );

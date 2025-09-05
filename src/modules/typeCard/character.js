@@ -66,6 +66,10 @@ export default class Character extends Card {
         super.takeDamage(damage, type);
         this.hp = Math.max(0, this.hp - damage);
         this.hpDisplay.updateText(this.hp.toString());
+        
+        // Hiển thị popup damage
+        this.showPopup(damage, 'damage');
+        
         if (this.hp <= 0) {
             this.scene.gameManager.gameOver();
         }
@@ -78,6 +82,55 @@ export default class Character extends Card {
     heal(healAmount) {
         this.hp = Math.min(this.getMaxHP(), this.hp + healAmount);
         this.hpDisplay.updateText(this.hp.toString());
+        
+        // Hiển thị popup heal
+        this.showPopup(healAmount, 'heal');
+    }
+
+    /**
+     * Hiển thị popup với màu và dấu tương ứng
+     * @param {number} amount - Số lượng (heal hoặc damage)
+     * @param {string} type - Loại popup ('heal' hoặc 'damage')
+     */
+    showPopup(amount, type = 'heal') {
+        // Xác định màu và dấu dựa trên type
+        let color, prefix;
+        if (type === 'heal') {
+            color = '#00ff00'; // Màu xanh lá
+            prefix = '+';
+        } else if (type === 'damage') {
+            color = '#ff0000'; // Màu đỏ
+            prefix = '-';
+        } else {
+            color = '#ffffff'; // Màu trắng mặc định
+            prefix = '';
+        }
+
+        // Tạo text popup tại vị trí tương đối (0,0) của character
+        const popupText = this.scene.add.text(0, 0, `${prefix}${amount}`, {
+            fontSize: '32px',
+            fill: color,
+            fontFamily: 'Arial',
+            fontWeight: 'bold',
+            stroke: '#000000', // Viền đen để dễ đọc
+            strokeThickness: 4
+        }).setOrigin(0.5).setDepth(2002);
+
+        // Thêm text vào character để nó di chuyển theo
+        this.add(popupText);
+
+        // Tạo animation popup
+        this.scene.tweens.add({
+            targets: popupText,
+            y: -50, // Di chuyển lên trên (tương đối với character)
+            alpha: 0.1, // Mờ dần
+            duration: 2000,
+            ease: 'Power2',
+            onComplete: () => {
+                // Xóa text sau khi animation hoàn thành
+                popupText.destroy();
+            }
+        });
     }
     /**
      * Lấy max HP theo level hiện tại
@@ -171,11 +224,6 @@ export default class Character extends Card {
             this.scene.sellButton.updateButton();
         }
     }
-
-
-    /**
-     * Thực hiện bán vũ khí
-     */
 
 }
 

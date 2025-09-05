@@ -35,12 +35,20 @@ import character from '../data/atlas/character.json';
 import element from '../data/atlas/element.json';
 import coin from '../data/atlas/coin.json';
 import weapon_sword from '../data/atlas/weapon-sword.json';
-// import weapon_catalyst from '../data/atlas/weapon-catalyst.json';
-// import weapon_polearm from '../data/atlas/weapon-polearm.json';
-// import weapon_claymore from '../data/atlas/weapon-claymore.json';
-// import weapon_bow from '../data/atlas/weapon-bow.json';
+import weapon_catalyst from '../data/atlas/weapon-catalyst.json';
+import weapon_polearm from '../data/atlas/weapon-polearm.json';
+import weapon_claymore from '../data/atlas/weapon-claymore.json';
+import weapon_bow from '../data/atlas/weapon-bow.json';
 
 import enemy_hilichurl from '../data/atlas/enemy-hilichurl.json';
+import enemy_abyss from '../data/atlas/enemy-abyss.json';
+import enemy_slime from '../data/atlas/enemy-slime.json';
+import enemy_shroom from '../data/atlas/enemy-shroom.json';
+import enemy_automatons from '../data/atlas/enemy-automatons.json';
+import enemy_kairagi from '../data/atlas/enemy-kairagi.json';
+import enemy_eremite from '../data/atlas/enemy-eremite.json';
+import enemy_fatui from '../data/atlas/enemy-fatui.json';
+import enemy_boss from '../data/atlas/enemy-boss.json';
 
 import food from '../data/atlas/food.json';
 import trap from '../data/atlas/trap.json';
@@ -48,19 +56,10 @@ import treasure from '../data/atlas/treasure.json';
 import bomb from '../data/atlas/bomb.json';
 
 import weapon_sword_badge from '../data/atlas/weapon-sword-badge.json';
-// import weapon_catalyst_badge from '../data/atlas/weapon-catalyst-badge.json';
-// import weapon_polearm_badge from '../data/atlas/weapon-polearm-badge.json';
-// import weapon_claymore_badge from '../data/atlas/weapon-claymore-badge.json';
-// import weapon_bow_badge from '../data/atlas/weapon-bow-badge.json';
-
-// import enemy_abyss from '../data/atlas/enemy-abyss.json';
-// import enemy_slime from '../data/atlas/enemy-slime.json';
-// import enemy_shroom from '../data/atlas/enemy-shroom.json';
-// import enemy_automatons from '../data/atlas/enemy-automatons.json';
-// import enemy_kairagi from '../data/atlas/enemy-kairagi.json';
-// import enemy_eremite from '../data/atlas/enemy-eremite.json';
-// import enemy_fatui from '../data/atlas/enemy-fatui.json';
-// import enemy_boss from '../data/atlas/enemy-boss.json';
+import weapon_catalyst_badge from '../data/atlas/weapon-catalyst-badge.json';
+import weapon_polearm_badge from '../data/atlas/weapon-polearm-badge.json';
+import weapon_claymore_badge from '../data/atlas/weapon-claymore-badge.json';
+import weapon_bow_badge from '../data/atlas/weapon-bow-badge.json';
 
 
 export default class AssetManager {
@@ -114,9 +113,27 @@ export default class AssetManager {
 
             case 'LibraryScene':
             case 'MapScenes':
-                // this.loadImages([...CHARACTER_ASSETS, 
-                //     ...ELEMENT_ASSETS, ...EMPTY_CARD]);
-                console.log('LibraryScene load EMPTY_CARD assets');
+                // Load các atlas cần thiết cho LibraryScene
+                this.loadAtlas(weapon_sword);
+                this.loadAtlas(weapon_catalyst);
+                this.loadAtlas(weapon_polearm);
+                this.loadAtlas(weapon_claymore);
+                this.loadAtlas(weapon_bow);
+                this.loadAtlas(enemy_hilichurl);
+                this.loadAtlas(enemy_abyss);
+                this.loadAtlas(enemy_slime);
+                this.loadAtlas(enemy_shroom);
+                this.loadAtlas(enemy_automatons);
+                this.loadAtlas(enemy_kairagi);
+                this.loadAtlas(enemy_eremite);
+                this.loadAtlas(enemy_fatui);
+                this.loadAtlas(enemy_boss);
+                this.loadAtlas(food);
+                this.loadAtlas(trap);
+                this.loadAtlas(treasure);
+                this.loadAtlas(bomb);
+                this.loadImages([...EMPTY_CARD]);
+                console.log('LibraryScene load all card atlas assets');
                 break;
 
             case 'SelectCharacterScene':

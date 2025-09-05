@@ -9,8 +9,8 @@ export default class Refinement extends Item {
             'Refinement',
             'refinement',
             'refinement',
-            0,      // Power cơ bản
-            0,      // Cooldown cơ bản
+            10,      // Power cơ bản
+            10,      // Cooldown cơ bản
             'Tinh chế item để tăng sức mạnh',
             6       // Max level
         );

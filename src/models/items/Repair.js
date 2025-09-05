@@ -9,8 +9,8 @@ export default class Repair extends Item {
             'Repair',
             'repair',
             'repair',
-            0,      // Power cơ bản
-            0,      // Cooldown cơ bản
+            10,      // Power cơ bản
+            10,      // Cooldown cơ bản
             'Sửa chữa item bị hỏng',
             5       // Max level
         );

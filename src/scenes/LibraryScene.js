@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { GradientText } from '../utils/GradientText.js';
 import { HeaderUI } from '../utils/HeaderUI.js';
+import libraryCardsData from '../data/libraryCards.json';
 
 // === BẢNG MÀU CHỦ ĐẠO ===
 const COLOR_LIGHT = 0x96576a;      // Màu sáng (nâu nhạt) - dùng cho viền, thumb slider
@@ -98,10 +99,11 @@ export default class LibraryScene extends Phaser.Scene {
 
             // === XỬ LÝ CLICK EVENT ===
             .on('child.click', (child) => {
-                console.log(`LibraryScene: Card clicked!`);
-                console.log(`Child object:`, child);
-                console.log(`Card Index: ${child.cardIndex}`);
-                console.log(`Card Name: ${child.name}`);
+                if (child.cardData) {
+                    console.log(`Card clicked: ${child.cardData.name} (${child.cardData.type})`);
+                    // Hiển thị dialog thông tin card
+                    this.showCardInfoDialog(child.cardData);
+                }
                 // child chính là card container được click
             });
 
@@ -149,6 +151,9 @@ export default class LibraryScene extends Phaser.Scene {
             space: { item: 30 }                 // Khoảng cách giữa các item (10px)
         });
 
+        // Lấy tất cả cards từ libraryCardsData
+        const allCards = this.getAllCardsFromData();
+
         // === TẠO 12 HÀNG, MỖI HÀNG 3 THẺ ===
         for (let row = 0; row < 12; row++) {
             // Tạo sizer cho mỗi hàng (container ngang)
@@ -160,7 +165,8 @@ export default class LibraryScene extends Phaser.Scene {
             // === THÊM 3 THẺ VÀO HÀNG NÀY ===
             for (let col = 0; col < 3; col++) {
                 let cardIndex = row * 3 + col;   // Tính index thẻ (0-35)
-                let cardContainer = this.createCard(cardIndex + 1); // Tạo thẻ (ID từ 1-36)
+                let cardData = allCards[cardIndex] || null; // Lấy dữ liệu card
+                let cardContainer = this.createCard(cardIndex + 1, cardData); // Tạo thẻ với dữ liệu
                 rowSizer.add(cardContainer);     // Thêm thẻ vào hàng
             }
 
@@ -171,7 +177,24 @@ export default class LibraryScene extends Phaser.Scene {
         return panel;
     }
 
-    createCard(cardIndex, width = 160, height = 274.3) {
+    getAllCardsFromData() {
+        const allCards = [];
+        
+        // Duyệt qua tất cả các loại card trong libraryCardsData
+        Object.keys(libraryCardsData).forEach(cardType => {
+            const cardsOfType = libraryCardsData[cardType];
+            cardsOfType.forEach(card => {
+                allCards.push({
+                    ...card,
+                    cardType: cardType // Thêm loại card vào dữ liệu
+                });
+            });
+        });
+        
+        return allCards;
+    }
+
+    createCard(cardIndex, cardData, width = 160, height = 274.3) {
         // === NỀN THẺ ===
         let background = this.rexUI.add.roundRectangle({
             x: 0, y: 0,                          // Vị trí (0,0) - sẽ được đặt bởi container
@@ -183,11 +206,54 @@ export default class LibraryScene extends Phaser.Scene {
         });
 
         // === ẢNH THẺ ===
-        let cardImage = this.add.image(0, 0, 'empty')  // Vị trí ảnh (trên giữa thẻ)
-            .setDisplaySize(width, height); // Kích thước hiển thị ảnh scale theo thẻ
+        let cardImage;
+        if (cardData) {
+            try {
+                // Tạo atlas key dựa trên loại card và thông tin từ JSON
+                let atlasKey = cardData.type;
+                if (cardData.type === 'weapon') {
+                    // Với weapon, sử dụng category từ JSON (ví dụ: 'sword', 'polearm', etc.)
+                    atlasKey = 'weapon-' + cardData.category;
+                } else if (cardData.type === 'enemy') {
+                    // Với enemy, sử dụng clan từ JSON
+                    atlasKey = 'enemy-' + cardData.clan;
+                }
+                // Các loại khác (food, trap, treasure, bomb) giữ nguyên type làm atlas key
+                
+                // Kiểm tra xem atlas có tồn tại không
+                if (this.textures.exists(atlasKey)) {
+                    // Kiểm tra xem frame có tồn tại không
+                    const texture = this.textures.get(atlasKey);
+                    const frameNames = texture.getFrameNames();
+                    
+                    if (frameNames.includes(cardData.id)) {
+                        // Sử dụng ảnh thực tế từ atlas
+                        cardImage = this.add.image(0, 0, atlasKey, cardData.id)
+                            .setDisplaySize(width, height);
+                    } else {
+                        // Fallback về ảnh empty
+                        cardImage = this.add.image(0, 0, 'empty')
+                            .setDisplaySize(width, height);
+                    }
+                } else {
+                    // Fallback về ảnh empty
+                    cardImage = this.add.image(0, 0, 'empty')
+                        .setDisplaySize(width, height);
+                }
+            } catch (error) {
+                // Fallback về ảnh empty
+                cardImage = this.add.image(0, 0, 'empty')
+                    .setDisplaySize(width, height);
+            }
+        } else {
+            // Sử dụng ảnh empty nếu không có dữ liệu
+            cardImage = this.add.image(0, 0, 'empty')
+                .setDisplaySize(width, height);
+        }
 
         // === TÊN THẺ ===
-        let text = this.add.text(0, height * 0.35, `Card ${cardIndex}`, {  // Vị trí text (dưới giữa thẻ)
+        let cardName = cardData ? cardData.name : `Card ${cardIndex}`;
+        let text = this.add.text(0, height * 0.35, cardName, {  // Vị trí text (dưới giữa thẻ)
             fontSize: Math.max(8, width * 0.15), // Kích thước chữ scale theo width
             fill: '#ffffff',                     // Màu chữ trắng
             fontFamily: 'Arial',                 // Font chữ
@@ -200,10 +266,147 @@ export default class LibraryScene extends Phaser.Scene {
             .setSize(width, height)              // Kích thước container (bằng kích thước thẻ)
             .add([ cardImage, background, text]);  // Thêm các thành phần vào container
 
-        // Lưu cardIndex vào container để có thể truy cập sau này
+        // Lưu cardIndex và cardData vào container để có thể truy cập sau này
         child.cardIndex = cardIndex;
+        child.cardData = cardData;
         child.name = `card_${cardIndex}`;  // Thêm name để dễ nhận diện
 
         return child;
+    }
+
+    showCardInfoDialog(cardData) {
+        // Hiển thị dialog thông tin thẻ
+        // Background mờ chặn tương tác với game bên dưới
+        // Dialog chỉ có thể đóng bằng nút X hoặc phím ESC
+
+        // Xóa dialog cũ nếu có
+        if (this.cardInfoDialog) {
+            this.cardInfoDialog.destroy();
+        }
+        const { width, height } = this.scale;
+        // Tạo container cho dialog ở giữa màn hình
+        this.cardInfoDialog = this.add.container(width / 2, height / 2);
+        this.cardInfoDialog.setDepth(120);
+
+        // Tạo background mờ - đặt trong container với gốc tọa độ tương đối
+        const bg = this.add.rectangle(-width / 2, -height / 2, width, height, 0x000000, 0.7)
+            .setOrigin(0, 0)
+            .setInteractive();
+
+        // Tạo background cho dialog - sử dụng màu chủ đạo của game với góc bo tròn
+        const dialogBg = this.add.graphics();
+        dialogBg.fillStyle(0x800080, 0.95);
+        dialogBg.lineStyle(3, 0xff3366);
+        dialogBg.fillRoundedRect(-200, -150, 400, 300, 20);
+        dialogBg.strokeRoundedRect(-200, -150, 400, 300, 20);
+
+        // Tạo ảnh thẻ (scale nhỏ hơn)
+        let cardImg;
+        try {
+            // Tạo atlas key dựa trên loại card và thông tin từ JSON
+            let atlasKey = cardData.type;
+            if (cardData.type === 'weapon') {
+                atlasKey = 'weapon-' + cardData.category;
+            } else if (cardData.type === 'enemy') {
+                atlasKey = 'enemy-' + cardData.clan;
+            }
+            
+            if (this.textures.exists(atlasKey) && this.textures.get(atlasKey).getFrameNames().includes(cardData.id)) {
+                cardImg = this.add.image(0, 0, atlasKey, cardData.id);
+            } else {
+                cardImg = this.add.image(0, 0, 'empty');
+            }
+        } catch (error) {
+            cardImg = this.add.image(0, 0, 'empty');
+        }
+        cardImg.setDisplaySize(80, 137.14);
+
+        // Tạo text cho tên thẻ
+        const nameText = this.add.text(0, -120, cardData.name, {
+            fontSize: '24px',
+            fill: '#ffffff',
+            fontFamily: 'Arial'
+        });
+        nameText.setOrigin(0.5);
+
+        // Tạo text cho loại thẻ
+        const typeText = this.add.text(0, -100, `Type: ${cardData.type}`, {
+            fontSize: '16px',
+            fill: '#ffb3d9',
+            fontFamily: 'Arial'
+        });
+        typeText.setOrigin(0.5);
+
+        // Tạo text cho mô tả thẻ
+        const descText = this.add.text(0, 100, cardData.description, {
+            fontSize: '14px',
+            fill: '#ecf0f1',
+            fontFamily: 'Arial',
+            wordWrap: { width: 300 },
+            align: 'center'
+        });
+        descText.setOrigin(0.5);
+
+        // Tạo nút đóng với màu theme và góc bo tròn
+        const closeBtn = this.add.graphics();
+        closeBtn.fillStyle(0xff3366);
+        closeBtn.fillRoundedRect(-30, -25, 60, 50, 8);
+
+        // Đặt vị trí của nút
+        closeBtn.setPosition(0, 190);
+
+        const closeText = this.add.text(0, 190, 'X', {
+            fontSize: '24px',
+            fill: '#ffffff',
+            fontFamily: 'Arial'
+        });
+        closeText.setOrigin(0.5);
+
+        // Làm cho nút đóng có thể click và có hiệu ứng hover
+        closeBtn.setInteractive(new Phaser.Geom.Rectangle(-30, -25, 60, 50), Phaser.Geom.Rectangle.Contains);
+
+        // Hiệu ứng hover
+        closeBtn.on('pointerover', () => {
+            closeBtn.clear();
+            closeBtn.setScale(1.2);
+            closeBtn.fillStyle(0xff6b9d); // Màu sáng hơn khi hover
+            closeBtn.fillRoundedRect(-30, -25, 60, 50, 8);
+        });
+
+        closeBtn.on('pointerout', () => {
+            closeBtn.clear();
+            closeBtn.setScale(1);
+            closeBtn.fillStyle(0xff3366); // Màu gốc khi không hover
+            closeBtn.fillRoundedRect(-30, -25, 60, 50, 8);
+        });
+
+        closeBtn.on('pointerdown', () => {
+            this.hideCardInfoDialog();
+        });
+
+        // Thêm tất cả elements vào dialog container
+        this.cardInfoDialog.add([bg, dialogBg, cardImg, nameText, typeText, descText, closeBtn, closeText]);
+
+        // Thêm vào scene
+        this.add.existing(this.cardInfoDialog);
+
+        // Chỉ có 2 cách để đóng dialog:
+        // 1. Click vào nút X (closeBtn)
+        // 2. Nhấn phím ESC
+        this.escKey = this.input.keyboard.addKey('ESC');
+        this.escKey.on('down', () => {
+            this.hideCardInfoDialog();
+        });
+    }
+
+    hideCardInfoDialog() {
+        if (this.cardInfoDialog) {
+            this.cardInfoDialog.destroy();
+            this.cardInfoDialog = null;
+        }
+        if (this.escKey) {
+            this.escKey.destroy();
+            this.escKey = null;
+        }
     }
 }

@@ -9,10 +9,10 @@ export default class HealingPotion extends Item {
             'Healing Potion',
             'healing-potion',
             'healing-potion',
-            50,     // Power cơ bản (HP hồi phục)
-            0,      // Cooldown cơ bản
-            'Hồi phục 50 HP',
-            5       // Max level
+            2,     // Power cơ bản (HP hồi phục)
+            18,      // Cooldown cơ bản
+            'Hồi phục 2 HP',
+            10       // Max level
         );
     }
 
@@ -21,5 +21,18 @@ export default class HealingPotion extends Item {
      */
     get power() {
         return this._power * (1 + this.level * 0.15); // Tăng 15% mỗi level
+    }
+    /**
+     * Ghi đè phương thức effect để có logic riêng
+     */
+    effect(gameManager) {
+        if(gameManager.cardManager.CardCharacter.hp >= gameManager.cardManager.CardCharacter.getMaxHP()) {
+            return false;
+        }
+        gameManager.animationManager.startItemAnimation(this.image, () => {
+            console.log(`Sử dụng item: ${this.nameId}`);
+            gameManager.cardManager.CardCharacter.heal(this.power);
+        });
+        return true;
     }
 }

@@ -11,6 +11,7 @@ export default class GameManager {
     this.scene = scene;
     this.coin = 0;
     this.OnCompleteMoveCount = 0;
+    this.isGameOver = false;
     // Khởi tạo highScores object từ localStorage
     this.highScore = this.getHighScore();
 
@@ -45,7 +46,9 @@ export default class GameManager {
         this.emitter.emit('completeMove');
         return;
       }
-
+      if (this.isGameOver) {
+        return;
+      }
       const movement = CalculatePositionCard.calculateMovement(characterIndex, index);
 
       // hủy card cũ ở vị trí index
@@ -119,8 +122,14 @@ export default class GameManager {
   /**
    * Thêm coin vào coin
    */
-  addCoin(points) {
+  addCoin(points, energy = null) {
     this.coin += points;
+
+    if (energy) {
+      this.scene.itemEquipment.forEach(item => {
+        item.cooldowninning(energy);
+      });
+    }
     // Cập nhật hiển thị coin trong GameScene
     if (this.scene && this.scene.coinText) {
       this.scene.coinText.setText(`🪙${this.coin}`);
@@ -134,6 +143,8 @@ export default class GameManager {
 
   gameOver() {
     console.log('gameover!');
+    this.isGameOver = true;
+    this.scene.sellButton.hideButton();
 
     // Lấy tên character hiện tại
     const characterName = this.cardManager.CardCharacter?.constructor?.DEFAULT?.id;

@@ -29,10 +29,56 @@ export default class Enemy extends Card {
             SpritesheetWrapper.animationSlash(this.scene, this.x, this.y);
             this.scene.sound.play('sword-sound');
         }
+        this.showPopup(damage, 'damage');
+        this.cardImage.setTint(0xe05656);
+        setTimeout(() => {
+            this.cardImage.clearTint();
+        }, 200);
         if (this.health <= 0) {
             this.die();
         }
         return damage;
+    }
+
+    showPopup(amount, type = 'heal') {
+        // Xác định màu và dấu dựa trên type
+        let color, prefix;
+        if (type === 'heal') {
+            color = '#00ff00'; // Màu xanh lá
+            prefix = '+';
+        } else if (type === 'damage') {
+            color = '#ff0000'; // Màu đỏ
+            prefix = '-';
+        } else {
+            color = '#ffffff'; // Màu trắng mặc định
+            prefix = '';
+        }
+
+        // Tạo text popup tại vị trí tương đối (0,0) của character
+        const popupText = this.scene.add.text(0, 0, `${prefix}${amount}`, {
+            fontSize: '32px',
+            fill: color,
+            fontFamily: 'Arial',
+            fontWeight: 'bold',
+            stroke: '#000000', // Viền đen để dễ đọc
+            strokeThickness: 4
+        }).setOrigin(0.5).setDepth(2002);
+
+        // Thêm text vào character để nó di chuyển theo
+        this.add(popupText);
+
+        // Tạo animation popup
+        this.scene.tweens.add({
+            targets: popupText,
+            y: -50, // Di chuyển lên trên (tương đối với character)
+            alpha: 0.1, // Mờ dần
+            duration: 2000,
+            ease: 'Power2',
+            onComplete: () => {
+                // Xóa text sau khi animation hoàn thành
+                popupText.destroy();
+            }
+        });
     }
     /**
      * Hiệu ứng khi card được kích hoạt

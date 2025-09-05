@@ -9,7 +9,7 @@ export default class Corruption extends Item {
             'Corruption',
             'corruption',
             'corruption',
-            80,     // Power cơ bản
+            8,     // Power cơ bản
             3,      // Cooldown cơ bản
             'Gây corruption 80 damage',
             6       // Max level

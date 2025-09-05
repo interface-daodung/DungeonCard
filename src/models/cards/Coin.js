@@ -44,7 +44,7 @@ export default class Coin extends Card {
      * Override CardEffect để xử lý logic riêng của Coin
      */
     CardEffect() {
-        this.scene.gameManager.addCoin(this.score);
+        this.scene.gameManager.addCoin(this.score, 1);
         return false;
     }
 }

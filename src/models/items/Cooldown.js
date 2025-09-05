@@ -9,8 +9,8 @@ export default class Cooldown extends Item {
             'Cooldown',
             'cooldown',
             'cooldown',
-            0,      // Power cơ bản
-            0,      // Cooldown cơ bản
+            8,      // Power cơ bản
+            10,      // Cooldown cơ bản
             'Giảm cooldown của skill',
             7       // Max level cao vì item hỗ trợ
         );

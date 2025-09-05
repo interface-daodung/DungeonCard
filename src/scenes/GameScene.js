@@ -91,7 +91,7 @@ export default class GameScene extends Phaser.Scene {
       strokeThickness: 2
     });
 
-
+    this.itemEquipment = [];
 
     // 3 nút item - lấy từ localStorage và tạo từ itemFactory
     const itemButtons = this.createItemButtonsFromStorage();
@@ -99,7 +99,7 @@ export default class GameScene extends Phaser.Scene {
     const startX = width * 0.18;
 
     itemButtons.forEach((item, index) => {
-      this.createItemButton(startX + (index * itemSpacing), height * 0.15, item);
+      this.itemEquipment.push(this.createItemButton(startX + (index * itemSpacing), height * 0.15, item));
     });
   }
 
@@ -108,26 +108,33 @@ export default class GameScene extends Phaser.Scene {
     this.gameManager.cardManager.initializeCreateDeck(this);
   }
 
-  useItem(itemName) {
-    // Xử lý khi sử dụng item
-    console.log(`Sử dụng item: ${itemName}`);
-
-    // Có thể thêm logic sử dụng item ở đây
-    // Ví dụ: tăng damage, heal, buff, etc.
-
-    // Hiển thị thông báo
+  useItem(item, countText, itemImage, itemButton) {
     const { width, height } = this.scale;
-    const notification = this.add.text(width / 2, height * 0.8, `Đã sử dụng ${itemName}!`, {
-      fontSize: '18px',
-      fill: '#f39c12',
-      stroke: '#2c3e50',
-      strokeThickness: 2
-    }).setOrigin(0.5);
-
-    // Tự động ẩn thông báo sau 2 giây
-    this.time.delayedCall(2000, () => {
-      notification.destroy();
-    });
+    // Xử lý khi sử dụng item
+    if (item.effect(this.gameManager)) {
+      countText.cooldown = item.cooldown;
+      countText.setText(countText.cooldown.toString());
+      if (countText.cooldown > 0) {
+        countText.setVisible(true);
+        itemImage.setTint(0x8f8f8f);
+        itemButton.disableInteractive();
+      }
+    } else {
+      console.log('Item không thể sử dụng');
+      this.textItemNotUse = this.add.text(width * 0.5, height * 0.5, 'Item không thể sử dụng', {
+        fontSize: '24px',
+        fill: '#ffffff',
+        fontFamily: 'Arial, sans-serif',
+        fontWeight: 'bold',
+        backgroundColor: '#000000',
+        padding: { x: 25, y: 12 },
+        stroke: '#000000',
+        strokeThickness: 5
+      }).setOrigin(0.5).setDepth(2000).setAlpha(0.7);
+      setTimeout(() => {
+        this.textItemNotUse.destroy();
+      }, 1000);
+    }
   }
 
   createItemButton(x, y, itemData) {
@@ -157,6 +164,7 @@ export default class GameScene extends Phaser.Scene {
       strokeThickness: 5
     });
     countText.setOrigin(0.5);
+    countText.cooldown = itemData.cooldown;
 
     // Thêm tất cả vào container
     itemButton.add([backgroundItem, itemImage, countText]);
@@ -176,10 +184,32 @@ export default class GameScene extends Phaser.Scene {
 
     // Xử lý click
     itemButton.on('pointerdown', () => {
-      this.useItem(itemData.name);
+      this.useItem(itemData, countText, itemImage, itemButton);
     });
 
-    return itemButton;
+    if (itemData.cooldown > 0) {
+      countText.setVisible(true);
+      itemImage.setTint(0x8f8f8f);
+      itemButton.disableInteractive();
+    } else {
+      countText.setVisible(false);
+      itemImage.clearTint();
+      itemButton.setInteractive();
+    }
+
+    return {
+      item: itemData,
+      itemButton: itemButton,
+      cooldowninning: (count) => {
+        countText.cooldown = Math.max(0, countText.cooldown - count);
+        countText.setText(countText.cooldown.toString());
+        if (countText.cooldown <= 0) {
+          countText.setVisible(false);
+          itemImage.clearTint();
+          itemButton.setInteractive();
+        }
+      }
+    };
   }
 
   /**

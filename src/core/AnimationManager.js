@@ -1,6 +1,8 @@
 // AnimationManager.js
 // Quản lý hàng đợi animation trong game
 
+import CalculatePositionCard from '../utils/CalculatePositionCard.js';
+
 export default class AnimationManager {
     constructor(scene) {
         this.scene = scene;
@@ -191,6 +193,8 @@ export default class AnimationManager {
         });
         const cardForm = this.scene.gameManager.cardManager.getCard(form);
         const cardTo = this.scene.gameManager.cardManager.getCard(to);
+        // đổi frame hoặc texture ở mặt sau/mặt trước
+        this.scene.gameManager.cardManager.swapCard(form, to);
 
         this.scene.tweens.add({
             targets: [cardForm, cardTo],
@@ -199,9 +203,6 @@ export default class AnimationManager {
             duration: 150,
             ease: 'Linear',
             onComplete: () => {
-                // đổi frame hoặc texture ở mặt sau/mặt trước
-                this.scene.gameManager.cardManager.swapCard(form, to);
-
                 this.scene.tweens.add({
                     targets: [cardTo, cardForm],
                     scaleX: 1,
@@ -223,11 +224,59 @@ export default class AnimationManager {
     }
 
     /**
+     * Bắt đầu animation shuffle toàn bộ thẻ trên bàn chơi
+     * @param {Function} onComplete - Callback khi animation hoàn thành
+     */
+    startShuffleAllCardsAnimation(onComplete) {
+        this.addToQueue(8, () => {
+            const allCards = this.scene.gameManager.cardManager.getAllCards();
+            // Tạo animation lật thẻ cho tất cả
+            // Bước 1: Lật tất cả thẻ (scaleX = 0)
+            this.scene.tweens.add({
+                targets: allCards,
+                scaleX: 0,
+                duration: 150,
+                ease: 'Linear',
+                onComplete: () => {
+                    // Lấy tất cả thẻ hiện tại
+                    // Shuffle vị trí sử dụng shuffleArray
+                    const allCardShuffledPositions = CalculatePositionCard
+                        .shuffleArray(allCards);
+
+                    allCardShuffledPositions.forEach((card, index) => {
+                        const newCoordinates = this.scene.gameManager.cardManager.getGridPositionCoordinates(index);
+                        card.setPosition(newCoordinates.x, newCoordinates.y);
+                        card.index = index;
+                    });
+                    allCards.sort((a, b) => a.index - b.index);
+                    this.scene.gameManager.cardManager.cards = allCards;
+
+                    // Bước 3: Lật lại tất cả thẻ (scaleX = 1)
+                    this.scene.tweens.add({
+                        targets: allCards,
+                        scaleX: 1,
+                        duration: 150,
+                        ease: 'Linear',
+                        onComplete: () => {
+                            if (onComplete && typeof onComplete === 'function') {
+                                onComplete();
+                            } else {
+                                console.error('AnimationManager: Không có callback được gọi');
+                            }
+                            this.completeAnimation();
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    /**
      * Bắt đầu animation thở lửa với priority 9
      * @param {Function} onComplete - Callback khi animation hoàn thành
      */
-    startBreatheFireAnimation(damage,cardList, onComplete) {
-        this.addToQueue(9, () => {
+    startBreatheFireAnimation(damage, cardList, onComplete) {
+        this.addToQueue(12, () => {
             // Logic animation thở lửa sẽ được thêm vào đây
             // Ví dụ: tạo hiệu ứng lửa, animation cho character, etc.
             cardList.forEach(cardIndex => {
@@ -249,7 +298,7 @@ export default class AnimationManager {
         });
     }
 
-    startExplosiveAnimation(damage,cardList, onComplete) {
+    startExplosiveAnimation(damage, cardList, onComplete) {
         this.addToQueue(9, () => {
             // Logic animation thở lửa sẽ được thêm vào đây
             // Ví dụ: tạo hiệu ứng lửa, animation cho character, etc.
@@ -272,25 +321,55 @@ export default class AnimationManager {
         });
     }
 
+    /**
+     * Bắt đầu animation hiệu ứng item với priority 7
+     * @param {string} itemImage - Đường dẫn ảnh của item
+     * @param {Function} onComplete - Callback khi animation hoàn thành
+     */
+    startItemAnimation(itemImage, onComplete) {
+        this.addToQueue(7, () => {
+            // Lấy kích thước màn hình
+            // const screenWidth = this.scene.cameras.main.width;
+            // const screenHeight = this.scene.cameras.main.height;
+            const { x, y } = this.scene.gameManager.cardManager
+                .getGridPositionCoordinates(4);
+            // Vị trí tâm màn hình
+            const centerX = x;
+            const centerY = y;
 
+            // Tạo sprite item tại vị trí tâm màn hình
+            const item = this.scene.add.image(centerX, centerY, 'item', itemImage);
 
+            // Đặt z-index cao để hiển thị trên các element khác
+            item.setDepth(200);
 
+            // Bắt đầu với scale nhỏ
+            item.setScale(0);
 
+            // Tạo hiệu ứng scale từ nhỏ đến to và fade out trong 1 animation
+            this.scene.tweens.add({
+                targets: item,
+                scale: 4.5,
+                alpha: 0.1,
+                duration: 300,
+                ease: 'Power2',
+                onComplete: () => {
+                    // Xóa sprite sau khi animation hoàn thành
+                    item.destroy();
 
+                    // Gọi callback của user trước
+                    if (onComplete && typeof onComplete === 'function') {
+                        onComplete();
+                    } else {
+                        console.error('AnimationManager: Không có callback được gọi');
+                    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+                    // Sau đó gọi completeAnimation để reset trạng thái và xử lý queue tiếp
+                    this.completeAnimation();
+                }
+            });
+        });
+    }
 
 
     //hàm có đang chưa dc dùng 

@@ -9,8 +9,8 @@ export default class BlackHole extends Item {
             'Black Hole',
             'black-hole',
             'black-hole',
-            100,    // Power cơ bản
-            5,      // Cooldown cơ bản
+            0,      // Power cơ bản
+            2,      // Cooldown cơ bản
             'Tạo hố đen hút tất cả enemy',
             8       // Max level cao hơn vì item mạnh
         );
@@ -28,5 +28,15 @@ export default class BlackHole extends Item {
      */
     get cooldown() {
         return Math.max(1, this._cooldown - this.level * 0.8); // Giảm 0.8 mỗi level, tối thiểu 1
+    }
+
+    /**
+     * Ghi đè phương thức get effect để có logic riêng
+     */
+    effect(gameManager) {
+        gameManager.animationManager.startShuffleAllCardsAnimation(() => {
+            console.log('BlackHole: Shuffle all cards');
+        });
+        return true;
     }
 }   
