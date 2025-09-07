@@ -16,7 +16,7 @@
             "food": ["MystiqueSoup", "Pizza", "RoastChicken"],
             "weapons": ["SwordSteampunk", "SwordForest", "SwordSkyward"],
             "coins": ["Coin"],
-            "traps": ["AbyssCall", "BreatheFire"],
+            "traps": ["Quicksand", "BreatheFire"],
             "treasures": ["Chest", "GoldMine"],
             "bombs": ["Explosive"]
         }

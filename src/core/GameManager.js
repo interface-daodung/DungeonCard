@@ -24,6 +24,10 @@ export default class GameManager {
     this.animationManager = new AnimationManager(scene);
   }
 
+  setItemEquipment(itemEquipment) {
+    this.itemEquipment = itemEquipment;
+  }
+
 
   /**
    * Di chuyển card từ vị trí cũ sang vị trí mới
@@ -142,7 +146,8 @@ export default class GameManager {
   }
 
   gameOver() {
-    console.log('gameover!');
+    console.log('gameOver!');
+    this.emitter.emit('gameOver');
     this.isGameOver = true;
     this.scene.sellButton.hideButton();
 

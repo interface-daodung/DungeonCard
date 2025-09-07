@@ -34,6 +34,9 @@ export default class BlackHole extends Item {
      * Ghi đè phương thức get effect để có logic riêng
      */
     effect(gameManager) {
+        gameManager.animationManager.startItemAnimation(this.image, () => {
+            console.log(`Sử dụng item: ${this.nameId}`);
+        });
         gameManager.animationManager.startShuffleAllCardsAnimation(() => {
             console.log('BlackHole: Shuffle all cards');
         });

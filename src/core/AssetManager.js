@@ -112,7 +112,6 @@ export default class AssetManager {
                 break;
 
             case 'LibraryScene':
-            case 'MapScenes':
                 // Load các atlas cần thiết cho LibraryScene
                 this.loadAtlas(weapon_sword);
                 this.loadAtlas(weapon_catalyst);
@@ -132,10 +131,12 @@ export default class AssetManager {
                 this.loadAtlas(trap);
                 this.loadAtlas(treasure);
                 this.loadAtlas(bomb);
+                this.loadAtlas(coin);
                 this.loadImages([...EMPTY_CARD]);
                 console.log('LibraryScene load all card atlas assets');
                 break;
-
+            case 'MapScenes':
+                break;
             case 'SelectCharacterScene':
                 this.loadAtlas(element);
                 // this.loadImages(ELEMENT_ASSETS);

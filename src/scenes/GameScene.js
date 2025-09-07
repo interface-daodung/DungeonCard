@@ -101,6 +101,7 @@ export default class GameScene extends Phaser.Scene {
     itemButtons.forEach((item, index) => {
       this.itemEquipment.push(this.createItemButton(startX + (index * itemSpacing), height * 0.15, item));
     });
+    this.gameManager.setItemEquipment(this.itemEquipment);
   }
 
   createDeck() {
@@ -121,7 +122,18 @@ export default class GameScene extends Phaser.Scene {
       }
     } else {
       console.log('Item không thể sử dụng');
-      this.textItemNotUse = this.add.text(width * 0.5, height * 0.5, 'Item không thể sử dụng', {
+      
+      // Kiểm tra nếu đã có textItemNotUse đang hiển thị thì không tạo mới
+      if (this.textItemNotUse && this.textItemNotUse.active) {
+        return;
+      }
+      
+      // Hủy timeout cũ nếu có
+      if (this.textItemNotUseTimeout) {
+        clearTimeout(this.textItemNotUseTimeout);
+      }
+      
+      this.textItemNotUse = this.add.text(width * 0.5, height * 0.5, 'Item chưa đủ điều kiện để sử dụng', {
         fontSize: '24px',
         fill: '#ffffff',
         fontFamily: 'Arial, sans-serif',
@@ -131,8 +143,13 @@ export default class GameScene extends Phaser.Scene {
         stroke: '#000000',
         strokeThickness: 5
       }).setOrigin(0.5).setDepth(2000).setAlpha(0.7);
-      setTimeout(() => {
-        this.textItemNotUse.destroy();
+      
+      this.textItemNotUseTimeout = setTimeout(() => {
+        if (this.textItemNotUse) {
+          this.textItemNotUse.destroy();
+          this.textItemNotUse = null;
+        }
+        this.textItemNotUseTimeout = null;
       }, 1000);
     }
   }
@@ -200,6 +217,9 @@ export default class GameScene extends Phaser.Scene {
     return {
       item: itemData,
       itemButton: itemButton,
+      cooldown: () => {
+        return countText.cooldown;
+      },
       cooldowninning: (count) => {
         countText.cooldown = Math.max(0, countText.cooldown - count);
         countText.setText(countText.cooldown.toString());

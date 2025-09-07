@@ -22,4 +22,25 @@ export default class Seasoning extends Item {
     get power() {
         return this._power + (this.level * 15); // Tăng 15 mỗi level
     }
+
+    effect(gameManager) {
+        let food = 0;
+        gameManager.cardManager.getAllCards().forEach(card => {
+            if (card.type === 'food') {
+                food++;
+            }
+        });
+        if (food === 0) {
+            return false;
+        }
+        gameManager.animationManager.startItemAnimation(this.image, () => {
+            console.log(`Sử dụng item: ${this.nameId}`);
+            gameManager.cardManager.getAllCards().forEach(card => {
+                if (card.type === 'food') {
+                    card.seasoning(this.power);
+                }
+            });
+        });
+        return true;
+    }
 }

@@ -27,7 +27,7 @@ export default class BreatheFire extends Trap {
         
         // Lắng nghe event với unique ID
         this.unsubscribeList.push(this.scene.gameManager.emitter
-            .on('completeMove', this.transformationAgency.bind(this), 3));
+            .on('completeMove', this.transformationAgency.bind(this), 4));
 
         // Tạo card và thêm vào scene
         this.createCard();

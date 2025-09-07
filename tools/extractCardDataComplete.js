@@ -193,7 +193,7 @@ function extractDefaultFromFile(filePath, fileName) {
             
             try {
                 const defaultObj = JSON.parse(cleanContent);
-                console.log(`✅ Extracted ${defaultObj.name || fileName}`);
+                console.log(`✅ Extracted ${defaultObj.name || fileName} (JSON parsed)`);
                 return defaultObj;
             } catch (parseError) {
                 console.error(`❌ JSON Parse Error in ${fileName}:`, parseError.message);
@@ -262,9 +262,11 @@ export async function extractAllCardData() {
                 const cardData = extractDefaultFromFile(filePath, cardInfo.fileName);
                 
                 if (cardData) {
-                    // Không ghi đè category nếu đã có từ file
-                    if (!cardData.category) {
-                        cardData.category = category;
+                    // Chỉ weapon mới được gán category mặc định từ thư mục
+                    // Các thẻ khác: giữ nguyên category từ DEFAULT (nếu có), không gán mặc định
+                    if (category !== 'weapon' && !cardData.category) {
+                        // Không gán category mặc định cho các thẻ không phải weapon
+                        // Giữ nguyên cardData.category (undefined)
                     }
                     cardData.className = cardInfo.className;
                     allCardData[category].push(cardData);
@@ -280,7 +282,8 @@ export async function extractAllCardData() {
             const cardData = extractDefaultFromFile(filePath, cardInfo.fileName);
             
             if (cardData) {
-                cardData.category = 'coin';
+                // Coin không được gán category mặc định
+                // Giữ nguyên category từ DEFAULT (nếu có)
                 cardData.className = cardInfo.className;
                 allCardData.coin.push(cardData);
             }
@@ -293,7 +296,8 @@ export async function extractAllCardData() {
             const cardData = extractDefaultFromFile(filePath, cardInfo.fileName);
             
             if (cardData) {
-                cardData.category = 'empty';
+                // Empty không được gán category mặc định
+                // Giữ nguyên category từ DEFAULT (nếu có)
                 cardData.className = cardInfo.className;
                 allCardData.empty.push(cardData);
             }

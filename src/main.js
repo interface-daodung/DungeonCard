@@ -7,7 +7,9 @@ import EquipScene from './scenes/EquipScene.js';
 import LibraryScene from './scenes/LibraryScene.js';
 import MapScenes from './scenes/MapScenes.js';
 import SelectCharacterScene from './scenes/SelectCharacterScene.js';
+import SettingsScene from './scenes/SettingsScene.js';
 import TestGraphicsRenderTexture from './scenes/TestGraphicsRenderTexture.js';
+import './utils/GameEventsManager.js';
 
 // Cấu hình game
 const config = {
@@ -15,7 +17,7 @@ const config = {
   width: 720,
   height: 1280,
   parent: 'game-container',
-  backgroundColor: '#000000',
+  backgroundColor: '#000000', // Sẽ được override bởi themeManager
   scale: {
     mode: Phaser.Scale.FIT,   // tự động scale cho khớp
     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -29,7 +31,7 @@ const config = {
       }
     ]
   },
-  scene: [LoadingScene, MenuScene, SelectCharacterScene, EquipScene, LibraryScene, MapScenes, GameScene, TestGraphicsRenderTexture]
+  scene: [LoadingScene, MenuScene, SelectCharacterScene, EquipScene, LibraryScene, MapScenes, GameScene, SettingsScene, TestGraphicsRenderTexture]
 };
 
 // Khởi tạo game

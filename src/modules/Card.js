@@ -134,9 +134,14 @@ export default class Card extends Phaser.GameObjects.Container {
         dialogBg.lineStyle(3, 0xff3366);
         dialogBg.fillRoundedRect(-200, -150, 400, 300, 20);
         dialogBg.strokeRoundedRect(-200, -150, 400, 300, 20);
-
+        let atlasKey = this.type;
+        if (this.type === 'weapon') {
+            atlasKey += '-' + this.constructor.DEFAULT.category;
+        } else if (this.type === 'enemy') {
+            atlasKey += '-' + this.constructor.DEFAULT.clan;
+        }
         // Tạo ảnh thẻ (scale nhỏ hơn)
-        const cardImg = this.scene.add.image(0, 0, this.nameId);
+        const cardImg = this.scene.add.image(0, 0, atlasKey, this.nameId);
         cardImg.setDisplaySize(80, 137.14);
 
         // Tạo text cho tên thẻ
@@ -367,8 +372,10 @@ export default class Card extends Phaser.GameObjects.Container {
 
     die() {
         this.ProgressDestroy();
-        const newCard = this.scene.gameManager.cardManager.cardFactory.createRandomCard(this.scene, this.index);
-        this.scene.gameManager.cardManager.addCard(newCard, this.index).processCreation();
+        if(this.scene?.gameManager){
+            const newCard = this.scene.gameManager.cardManager.cardFactory.createCoin(this.scene, this.index, this.GetRandom(1, 3));
+            this.scene.gameManager.cardManager.addCard(newCard, this.index).processCreation();
+        }
     }
     /**
      * Tạo hiệu ứng chết trước khi destroy card

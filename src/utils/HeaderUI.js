@@ -43,7 +43,8 @@ export class HeaderUI {
         // Event click
         settingsButton.on('pointerdown', () => {
             console.log('Settings button được click!');
-            // TODO: Thêm logic mở settings menu
+            // Mở SettingsScene
+            scene.scene.start('SettingsScene');
         });
 
         // Trả về method để cập nhật coin display

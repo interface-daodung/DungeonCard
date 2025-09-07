@@ -210,6 +210,26 @@ export default class Character extends Card {
     }
 
     /**
+     * Sửa chữa vũ khí
+     * @param {number} repairAmount - Số durability hồi phục
+     * @returns {boolean} - Trả về true nếu sửa chữa thành công, false nếu không có vũ khí
+     */
+    repair(repairAmount) {
+        if (!this.weapon) {
+            return false;
+        }
+        
+        // Tăng durability
+        this.weapon.durability += repairAmount;
+        
+        // Cập nhật UI
+        this.weaponDisplay.updateText(this.weapon.durability);
+        this.scene.sellButton.updateButton();
+        
+        return true;
+    }
+
+    /**
      * Thiết lập vũ khí mặc định
      */
     reduceDurability(damage) {

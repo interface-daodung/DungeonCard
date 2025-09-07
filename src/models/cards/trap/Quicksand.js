@@ -27,4 +27,15 @@ export default class Quicksand extends Trap {
         scene.add.existing(this);
     }
 
+    CardEffect() {
+        console.log('Quicksand card effect');
+        this.ProgressDestroy();
+        const newCard = this.scene.gameManager.cardManager.cardFactory.createRandomCard(this.scene, this.index);
+        this.scene.gameManager.cardManager.addCard(newCard, this.index).processCreation();
+        this.scene.gameManager.animationManager.startShuffleAllCardsAnimation(() => {
+            console.log('Quicksand: Shuffle all cards');
+        });
+        return true;
+    }
+
 }

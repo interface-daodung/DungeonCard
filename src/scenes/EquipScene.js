@@ -325,6 +325,15 @@ export default class EquipScene extends Phaser.Scene {
             fontWeight: 'bold'
         }).setOrigin(0.5);
 
+        // Tiêu đề levelText
+        const levelText = this.add.text(0, -dialogHeight / 2 + 60,
+            `Level: ${item.level}`, {
+            fontSize: '16px', // Tăng font size
+            fill: '#ffffff', // Chữ trắng
+            fontFamily: 'Arial, sans-serif',
+            fontWeight: 'bold'
+        }).setOrigin(0.5);
+
         // Icon item - căn giữa theo chiều ngang
         const itemIcon = this.add.image(0, - 120, 'item', item.image);
         itemIcon.setDisplaySize(180, 180); // Tăng kích thước icon
@@ -437,6 +446,7 @@ export default class EquipScene extends Phaser.Scene {
                     descriptionText.setText(item.description);
                     powerText.setText(`Power⚔️ : ${item.power}`);
                     cooldownText.setText(`Cooldown⏱️ : ${item.cooldown}`);
+                    levelText.setText(`Level: ${item.level}`);
 
                     // Cập nhật priceText sau khi upgrade
                     priceText.setText(`🪙${item.getPrice()}`);
@@ -539,7 +549,7 @@ export default class EquipScene extends Phaser.Scene {
         buttonContainer.add(closeButton);
 
         // Thêm tất cả vào dialog container
-        const dialogElements = [dialogBg, titleText, itemIcon, descriptionText, powerBg, powerText, cooldownBg, cooldownText, buttonContainer];
+        const dialogElements = [dialogBg, titleText, levelText, itemIcon, descriptionText, powerBg, powerText, cooldownBg, cooldownText, buttonContainer];
         dialogContainer.add(dialogElements);
 
         // Làm cho overlay có thể tương tác để chặn click vào bên dưới

@@ -16,5 +16,10 @@ export default class Food extends Card {
             text: this.food.toString()
         }, 'rightBottom');
     }
+
+    seasoning(power) {
+        this.food += power;
+        this.foodDisplay.updateText(this.food);
+    }
 }
 

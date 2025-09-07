@@ -23,5 +23,10 @@ export default class Weapon extends Card {
         });
         return false;
     }
+
+    refinement(power) {
+        this.durability += power;
+        this.durabilityDisplay.updateText(this.durability);
+    }
 }
 

@@ -10,7 +10,7 @@ export default class Repair extends Item {
             'repair',
             'repair',
             10,      // Power cơ bản
-            10,      // Cooldown cơ bản
+            1,      // Cooldown cơ bản
             'Sửa chữa item bị hỏng',
             5       // Max level
         );
@@ -21,5 +21,21 @@ export default class Repair extends Item {
      */
     get power() {
         return this._power + (this.level * 20); // Tăng 20 mỗi level
+    }
+
+    /**
+    * Ghi đè phương thức effect để có logic riêng
+    */
+    effect(gameManager) {
+        // Kiểm tra nhân vật có vũ khí và vũ khí có thể sửa chữa được
+        const { weapon } = gameManager.cardManager.CardCharacter;
+        if (weapon && weapon.durability > 0) {
+            gameManager.animationManager.startItemAnimation(this.image, () => {
+                // maxDurability vô hạn hoặc không có, chỉ cần tăng durability
+                gameManager.cardManager.CardCharacter.repair(this.power);
+            });
+            return true;
+        }
+        return false;
     }
 }

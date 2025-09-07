@@ -85,7 +85,7 @@ class CardFactory {
         this.cardClasses = {};
 
         // Thêm method add để thêm các class vào cardClasses
-        this.cardClasses.add = function(classes) {
+        this.cardClasses.add = function (classes) {
             classes.forEach(cls => {
                 this[cls.name] = cls;
             });
@@ -293,7 +293,7 @@ class CardFactory {
             if (random <= cumulativeWeight) {
                 // Nếu là Coin, tạo Coin động dựa trên elementCoin
                 if (cardType === 'Coin') {
-                    return this.createCoin(scene, x, y, index);
+                    return this.createCoin(scene, index);
                 }
                 const card = new this.cardClasses[cardType](scene, x, y, index);
                 console.log('card', card);
@@ -305,26 +305,11 @@ class CardFactory {
         const lastCardType = Object.keys(cardWeights)[Object.keys(cardWeights).length - 1];
         if (lastCardType === 'Coin') {
             console.warn('Fallback lỗi : ', lastCardType);
-            return this.createCoin(scene, x, y, index);
+            return this.createCoin(scene, index);
         }
         return new this.cardClasses[lastCardType](scene, x, y, index);
     }
 
-    /**
-     * Tạo thẻ theo loại   ////  có thể xóa sau này
-     * @param {string} cardType - Loại thẻ
-     * @param {Object} scene - Scene của Phaser
-     * @param {number} x - Vị trí x
-     * @param {number} y - Vị trí y
-     * @param {number} index - Index của thẻ
-     * @returns {Card} Thẻ được tạo
-     */
-    createCard(cardType, scene, x, y, index) {
-        if (this.cardClasses[cardType]) {
-            return new this.cardClasses[cardType](scene, x, y, index);
-        }
-        throw new Error(`Unknown card type: ${cardType}`);
-    }
 
     /**
      * Tạo Coin động dựa trên elementCoin của Warrior
@@ -334,9 +319,146 @@ class CardFactory {
      * @param {number} index - Index của thẻ
      * @returns {Card} Thẻ Coin động
      */
-    createCoin(scene, x, y, index) {
+    createCoin(scene, index, score = null) {
+        const { x, y } = scene.gameManager.cardManager.getGridPositionCoordinates(index);
         const coin = new Coin(scene, x, y, index, this.element);
+        if (score) {
+            coin.setScore(score);
+        }
         return coin;
+    }
+
+    createEmpty(scene, index) {
+        const { x, y } = scene.gameManager.cardManager.getGridPositionCoordinates(index);
+        return new Empty(scene, x, y, index);
+    }
+
+    /**
+     * Tính toán trọng số động cho danh sách thẻ hợp lệ
+     * @param {Array} validCardKeys - Danh sách các thẻ Key hợp lệ
+     * @returns {Object} Trọng số của các thẻ hợp lệ
+     */
+    _calculateDynamicCardWeights(validCardKeys) {
+        const currentStage = this.stageCardPools[this.currentStage];
+        const typeRatios = currentStage.typeRatios;
+        const availableCards = currentStage.availableCards;
+        
+        const cardWeights = {};
+        
+        // Tính tổng trọng số cho mỗi type (chỉ tính cho các thẻ trong validCardKeys)
+        const typeTotalWeights = {};
+        
+        for (const [typeName, typeRatio] of Object.entries(typeRatios)) {
+            if (availableCards[typeName]) {
+                let typeTotalWeight = 0;
+                
+                // Chỉ tính cho các thẻ có trong validCardKeys
+                for (const cardName of availableCards[typeName]) {
+                    if (validCardKeys.includes(cardName) && this.cardClasses[cardName]) {
+                        // Kiểm tra xem rarity có được định nghĩa trong DEFAULT không
+                        if (!this.cardClasses[cardName].DEFAULT?.rarity) {
+                            console.error(`CardFactory: Thẻ '${cardName}' không thể được tạo ngẫu nhiên - thiếu thuộc tính rarity trong DEFAULT`);
+                            continue;
+                        }
+                        
+                        // Lấy rarity từ class
+                        const rarity = this.cardClasses[cardName].DEFAULT.rarity;
+                        const weight = rarity * 10;
+                        typeTotalWeight += weight;
+                    }
+                }
+                
+                if (typeTotalWeight > 0) {
+                    typeTotalWeights[typeName] = typeTotalWeight;
+                }
+            }
+        }
+        
+        // Tính trọng số thực tế cho từng thẻ (chỉ cho các thẻ trong validCardKeys)
+        for (const [typeName, typeRatio] of Object.entries(typeRatios)) {
+            if (availableCards[typeName] && typeTotalWeights[typeName]) {
+                for (const cardName of availableCards[typeName]) {
+                    if (validCardKeys.includes(cardName) && this.cardClasses[cardName]) {
+                        // Kiểm tra xem rarity có được định nghĩa trong DEFAULT không
+                        if (!this.cardClasses[cardName].DEFAULT?.rarity) {
+                            continue;
+                        }
+                        
+                        // Lấy rarity từ class
+                        const rarity = this.cardClasses[cardName].DEFAULT.rarity;
+                        const baseWeight = rarity * 10;
+                        
+                        // Tính trọng số thực tế = (trọng số cơ bản / tổng trọng số type) * tỷ lệ type
+                        const actualWeight = (baseWeight / typeTotalWeights[typeName]) * typeRatio;
+                        cardWeights[cardName] = actualWeight;
+                    }
+                }
+            }
+        }
+        
+        return cardWeights;
+    }
+
+    /**
+     * Tạo thẻ từ danh sách các thẻ Key hợp lệ với trọng số được tính toán động
+     * @param {Object} scene - Scene của Phaser
+     * @param {number} index - Index của thẻ
+     * @param {Array} validCardKeys - Danh sách các thẻ Key hợp lệ
+     * @returns {Card} Thẻ được tạo
+     */
+    createCard(scene, index, validCardKeys) {
+        const { x, y } = scene.gameManager.cardManager.getGridPositionCoordinates(index);
+        
+        // Tính toán trọng số động dựa trên validCardKeys
+        const cardWeights = this._calculateDynamicCardWeights(validCardKeys);
+        
+        // Tính tổng trọng số thực tế
+        const totalWeight = Object.values(cardWeights).reduce((sum, weight) => sum + weight, 0);
+        
+        // Nếu không có thẻ nào hợp lệ, return null
+        if (totalWeight === 0) {
+            console.warn('CardFactory: Không có thẻ nào hợp lệ trong danh sách được cung cấp');
+            return null;
+        }
+        
+        // Chọn thẻ ngẫu nhiên dựa trên trọng số
+        const random = Math.random() * totalWeight;
+        let cumulativeWeight = 0;
+        
+        for (const [cardKey, weight] of Object.entries(cardWeights)) {
+            cumulativeWeight += weight;
+            if (random <= cumulativeWeight) {
+                // Nếu là Coin, tạo Coin động dựa trên elementCoin
+                if (cardKey === 'Coin') {
+                    return this.createCoin(scene, index);
+                }
+                
+                // Tạo thẻ từ cardClasses
+                if (this.cardClasses[cardKey]) {
+                    const card = new this.cardClasses[cardKey](scene, x, y, index);
+                    console.log('Tạo thẻ:', cardKey, 'từ danh sách hợp lệ');
+                    return card;
+                } else {
+                    console.error(`CardFactory: Không tìm thấy class cho thẻ '${cardKey}'`);
+                    continue;
+                }
+            }
+        }
+        
+        // Fallback về thẻ cuối cùng nếu có lỗi làm tròn
+        const lastCardKey = Object.keys(cardWeights)[Object.keys(cardWeights).length - 1];
+        if (lastCardKey === 'Coin') {
+            console.warn('Fallback về Coin:', lastCardKey);
+            return this.createCoin(scene, index);
+        }
+        
+        if (this.cardClasses[lastCardKey]) {
+            console.warn('Fallback về thẻ:', lastCardKey);
+            return new this.cardClasses[lastCardKey](scene, x, y, index);
+        }
+        
+        console.error('CardFactory: Không thể tạo thẻ fallback');
+        return null;
     }
 
     /**

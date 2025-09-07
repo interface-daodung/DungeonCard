@@ -64,7 +64,6 @@
       "description": "Anemo Samachurl - Kẻ địch caster gió có thể tạo gió và làm chậm người chơi.",
       "clan": "hilichurl",
       "rarity": 3,
-      "category": "enemy",
       "className": "AnemoSamachurl"
     },
     {
@@ -75,7 +74,6 @@
       "description": "Electro Samachurl - Kẻ địch caster điện có thể gây shock và làm chậm người chơi.",
       "clan": "hilichurl",
       "rarity": 3,
-      "category": "enemy",
       "className": "ElectroSamachurl"
     },
     {
@@ -86,7 +84,6 @@
       "description": "Dendro Samachurl - Kẻ địch caster thảo có thể tạo cây và gây poison.",
       "clan": "hilichurl",
       "rarity": 3,
-      "category": "enemy",
       "className": "DendroSamachurl"
     },
     {
@@ -97,7 +94,6 @@
       "description": "Geo Samachurl - Kẻ địch caster địa có thể tạo tường và gây stun.",
       "clan": "hilichurl",
       "rarity": 3,
-      "category": "enemy",
       "className": "GeoSamachurl"
     },
     {
@@ -108,7 +104,6 @@
       "description": "Hydro Samachurl - Kẻ địch caster thủy có thể tạo nước và gây wet effect.",
       "clan": "hilichurl",
       "rarity": 3,
-      "category": "enemy",
       "className": "HydroSamachurl"
     },
     {
@@ -119,7 +114,6 @@
       "description": "Hilichurl Fighter - Kẻ địch cơ bản có thể tấn công người chơi.",
       "clan": "hilichurl",
       "rarity": 4,
-      "category": "enemy",
       "className": "HilichurlFighter"
     },
     {
@@ -130,7 +124,6 @@
       "description": "Hilistray Water - Kẻ địch nước, có khả năng chữa lành và tạo hiệu ứng ẩm ướt.",
       "clan": "hilichurl",
       "rarity": 2,
-      "category": "enemy",
       "className": "HilistrayWater"
     },
     {
@@ -141,7 +134,6 @@
       "description": "Wooden Shieldwall - Kẻ địch tường gỗ, có khả năng phòng thủ trung bình và dễ bị cháy.",
       "clan": "hilichurl",
       "rarity": 3,
-      "category": "enemy",
       "className": "WoodenShieldwall"
     },
     {
@@ -152,7 +144,6 @@
       "description": "Lawachurl - Boss Hilichurl mạnh mẽ, có khả năng tấn công và phòng thủ cao.",
       "clan": "hilichurl",
       "rarity": 5,
-      "category": "enemy",
       "className": "Lawachurl"
     },
     {
@@ -163,7 +154,6 @@
       "description": "Rock Shieldwall - Kẻ địch tường đá, có khả năng phòng thủ rất cao và chống đỡ tốt.",
       "clan": "hilichurl",
       "rarity": 4,
-      "category": "enemy",
       "className": "RockShieldwall"
     },
     {
@@ -174,7 +164,6 @@
       "description": "Berserker - Kẻ địch điên cuồng, tấn công mạnh hơn khi máu thấp.",
       "clan": "hilichurl",
       "rarity": 4,
-      "category": "enemy",
       "className": "Berserker"
     },
     {
@@ -185,7 +174,6 @@
       "description": "Blazing - Kẻ địch cháy liên tục, gây damage theo thời gian cho người chơi gần đó.",
       "clan": "hilichurl",
       "rarity": 3,
-      "category": "enemy",
       "className": "Blazing"
     },
     {
@@ -196,7 +184,6 @@
       "description": "Ice Shieldwall - Kẻ địch tường băng, có khả năng phòng thủ cao và làm chậm người chơi.",
       "clan": "hilichurl",
       "rarity": 4,
-      "category": "enemy",
       "className": "IceShieldwall"
     },
     {
@@ -207,7 +194,6 @@
       "description": "Shooter - Kẻ địch bắn cung từ xa, tấn công cơ bản.",
       "clan": "hilichurl",
       "rarity": 2,
-      "category": "enemy",
       "className": "Shooter"
     },
     {
@@ -218,7 +204,6 @@
       "description": "Crackling - Kẻ địch nổ khi chết, gây damage cho người chơi gần đó.",
       "clan": "hilichurl",
       "rarity": 3,
-      "category": "enemy",
       "className": "Crackling"
     },
     {
@@ -229,7 +214,6 @@
       "description": "Cryo Shooter - Kẻ địch bắn băng từ xa, có thể làm chậm và đóng băng người chơi.",
       "clan": "hilichurl",
       "rarity": 2,
-      "category": "enemy",
       "className": "CryoShooter"
     },
     {
@@ -240,7 +224,6 @@
       "description": "Electro Shooter - Kẻ địch bắn điện từ xa, có thể gây shock và làm chậm người chơi.",
       "clan": "hilichurl",
       "rarity": 2,
-      "category": "enemy",
       "className": "ElectroShooter"
     }
   ],
@@ -250,7 +233,6 @@
       "name": "Life Essence",
       "type": "food",
       "description": "Life Essence - Tinh hoa sự sống hồi phục sức khỏe tối đa và tăng tất cả chỉ số.",
-      "category": "food",
       "className": "LifeEssence"
     },
     {
@@ -259,7 +241,6 @@
       "type": "food",
       "description": "Mystique Soup - Súp bí ẩn hồi phục sức khỏe và tăng sức mạnh tạm thời.",
       "rarity": 3,
-      "category": "food",
       "className": "MystiqueSoup"
     },
     {
@@ -268,7 +249,6 @@
       "type": "food",
       "description": "Pizza - Bánh pizza Ý hồi phục sức khỏe và tăng sức mạnh tấn công.",
       "rarity": 2,
-      "category": "food",
       "className": "Pizza"
     },
     {
@@ -277,7 +257,6 @@
       "type": "food",
       "description": "Roast Chicken - Gà nướng thơm ngon hồi phục sức khỏe và tăng khả năng phòng thủ.",
       "rarity": 2,
-      "category": "food",
       "className": "RoastChicken"
     },
     {
@@ -286,7 +265,6 @@
       "type": "food",
       "description": "Macarons - Bánh ngọt Pháp hồi phục sức khỏe và tăng tinh thần.",
       "rarity": 3,
-      "category": "food",
       "className": "Macarons"
     }
   ],
@@ -296,7 +274,6 @@
       "name": "AbyssCall",
       "type": "trap",
       "description": "AbyssCall - Bẫy gọi thêm enemy vào trận đấu khi kích hoạt.",
-      "category": "trap",
       "className": "AbyssCall"
     },
     {
@@ -305,7 +282,6 @@
       "type": "trap",
       "description": "Quicksand - Bẫy cát lún gây damage và làm chậm người chơi khi kích hoạt.",
       "rarity": 2,
-      "category": "trap",
       "className": "Quicksand"
     },
     {
@@ -314,7 +290,6 @@
       "type": "trap",
       "description": "Breathe Fire - Bẫy thở lửa gây damage cho người chơi khi kích hoạt.",
       "rarity": 2,
-      "category": "trap",
       "className": "BreatheFire"
     }
   ],
@@ -325,7 +300,6 @@
       "type": "treasure",
       "description": "Chest - Kho báu chính chứa nhiều loại phần thưởng quý giá.",
       "rarity": 4,
-      "category": "treasure",
       "className": "Chest"
     },
     {
@@ -334,7 +308,6 @@
       "type": "treasure",
       "description": "Bribery - Hối lộ để nhận phần thưởng lớn hơn chi phí.",
       "rarity": 3,
-      "category": "treasure",
       "className": "Bribery"
     },
     {
@@ -343,7 +316,6 @@
       "type": "treasure",
       "description": "GoldMine - Mỏ khai thác để nhận tài nguyên.",
       "rarity": 2,
-      "category": "treasure",
       "className": "GoldMine"
     }
   ],
@@ -354,7 +326,6 @@
       "type": "bomb",
       "description": "Explosive - Bom nổ gây damage cho tất cả trong bán kính.",
       "rarity": 3,
-      "category": "bomb",
       "className": "Explosive"
     }
   ],
@@ -362,7 +333,33 @@
     {
       "type": "coin",
       "rarity": 1,
-      "category": "coin",
+      "name": {
+        "pyro": "Mảnh Vỡ Nguyên Tố Hỏa",
+        "hydro": "Mảnh Vỡ Nguyên Tố Thủy",
+        "geo": "Mảnh Vỡ Nguyên Tố Nham",
+        "anemo": "Mảnh Vỡ Nguyên Tố Phong",
+        "electro": "Mảnh Vỡ Nguyên Tố Lôi",
+        "cryo": "Mảnh Vỡ Nguyên Tố Băng",
+        "dendro": "Mảnh Vỡ Nguyên Tố Thảo"
+      },
+      "id": {
+        "pyro": "pyro-fragment",
+        "hydro": "hydro-fragment",
+        "geo": "geo-fragment",
+        "anemo": "anemo-fragment",
+        "electro": "electro-fragment",
+        "cryo": "cryo-fragment",
+        "dendro": "dendro-fragment"
+      },
+      "description": {
+        "pyro": "Mảnh Vỡ Nguyên Tố Hỏa nhặt có thể đổi Xu và hồi chút năng lượng.",
+        "hydro": "Mảnh Vỡ Nguyên Tố Thủy nhặt có thể đổi Xu và hồi chút năng lượng.",
+        "geo": "Mảnh Vỡ Nguyên Tố Nham nhặt có thể đổi Xu và hồi chút năng lượng.",
+        "anemo": "Mảnh Vỡ Nguyên Tố Phong nhặt có thể đổi Xu và hồi chút năng lượng.",
+        "electro": "Mảnh Vỡ Nguyên Tố Lôi nhặt có thể đổi Xu và hồi chút năng lượng.",
+        "cryo": "Mảnh Vỡ Nguyên Tố Băng nhặt có thể đổi Xu và hồi chút năng lượng.",
+        "dendro": "Mảnh Vỡ Nguyên Tố Thảo nhặt có thể đổi Xu và hồi chút năng lượng."
+      },
       "className": "Coin"
     }
   ],
@@ -372,7 +369,6 @@
       "name": "Empty",
       "type": "empty",
       "description": "Empty - Thẻ trống không có tác dụng.",
-      "category": "empty",
       "className": "Empty"
     }
   ]

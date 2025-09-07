@@ -26,7 +26,7 @@ export default class Explosive extends Bomb {
         this.countdown = 5; // Bán kính nổ từ 2-4 ô
 
         this.unsubscribeList.push(this.scene.gameManager.emitter
-            .on('completeMove', this.BombCountdownEffect.bind(this), 1));
+            .on('completeMove', this.BombCountdownEffect.bind(this), 5));
 
 
         // Tạo card và thêm vào scene

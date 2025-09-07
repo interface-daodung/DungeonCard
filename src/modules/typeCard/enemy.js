@@ -4,7 +4,21 @@ import { SpritesheetWrapper } from '../../utils/SpritesheetWrapper.js';
 export default class Enemy extends Card {
     constructor(scene, x, y, index, name, nameId) {
         super(scene, x, y, index, name, nameId, 'enemy');
+        this.poisoning = false;
+    }
 
+    setPoisoning() {
+        this.poisoning = true;
+        this.unsubscribeList.push(this.scene.gameManager.emitter
+            .on('completeMove', this.PoisoningEffect.bind(this), 6));
+    }
+
+    PoisoningEffect() {
+        if (this.health > 1) {
+            if (this.poisoning) {
+                this.takeDamage(1, 'poisoning');
+            }
+        }
     }
 
     /**
@@ -22,7 +36,10 @@ export default class Enemy extends Card {
      * @param {number} damage - Lượng damage nhận vào
      */
     takeDamage(damage, type) {
-        super.takeDamage(damage,type);
+        if (this.health <= 0) {
+            return false;
+        }
+        super.takeDamage(damage, type);
         this.health -= damage;
         this.hpDisplay.updateText(this.health.toString());
         if (type === 'slash') {

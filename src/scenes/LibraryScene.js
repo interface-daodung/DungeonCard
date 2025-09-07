@@ -3,6 +3,7 @@ import { GradientText } from '../utils/GradientText.js';
 import { HeaderUI } from '../utils/HeaderUI.js';
 import libraryCardsData from '../data/libraryCards.json';
 
+
 // === BẢNG MÀU CHỦ ĐẠO ===
 const COLOR_LIGHT = 0x96576a;      // Màu sáng (nâu nhạt) - dùng cho viền, thumb slider
 const COLOR_DARK = 0x1f0614;       // Màu tối (nâu rất đậm) - dùng cho nền thẻ, track slider
@@ -100,7 +101,6 @@ export default class LibraryScene extends Phaser.Scene {
             // === XỬ LÝ CLICK EVENT ===
             .on('child.click', (child) => {
                 if (child.cardData) {
-                    console.log(`Card clicked: ${child.cardData.name} (${child.cardData.type})`);
                     // Hiển thị dialog thông tin card
                     this.showCardInfoDialog(child.cardData);
                 }
@@ -154,20 +154,46 @@ export default class LibraryScene extends Phaser.Scene {
         // Lấy tất cả cards từ libraryCardsData
         const allCards = this.getAllCardsFromData();
 
-        // === TẠO 12 HÀNG, MỖI HÀNG 3 THẺ ===
-        for (let row = 0; row < 12; row++) {
+        // === TẠO LƯỚI ĐỘNG KHÔNG GIỚI HẠN ===
+        const cardsPerRow = 3;
+        
+        // Ưu tiên hiển thị coin trước, sau đó là các cards khác
+        const coinCards = allCards.filter(card => card.cardType === 'coin');
+        const otherCards = allCards.filter(card => card.cardType !== 'coin');
+        
+        // Sắp xếp lại: coin trước, sau đó là cards khác
+        const sortedCards = [...coinCards, ...otherCards];
+        
+        // Hiển thị tất cả cards
+        const cardsToShow = sortedCards;
+        const totalRows = Math.ceil(cardsToShow.length / cardsPerRow);
+        
+        
+        for (let row = 0; row < totalRows; row++) {
             // Tạo sizer cho mỗi hàng (container ngang)
             var rowSizer = this.rexUI.add.sizer({
                 orientation: 'x',                // Sắp xếp theo chiều ngang (x-axis)
                 space: { item: 30 }             // Khoảng cách giữa các thẻ (10px)
             });
 
-            // === THÊM 3 THẺ VÀO HÀNG NÀY ===
-            for (let col = 0; col < 3; col++) {
-                let cardIndex = row * 3 + col;   // Tính index thẻ (0-35)
-                let cardData = allCards[cardIndex] || null; // Lấy dữ liệu card
-                let cardContainer = this.createCard(cardIndex + 1, cardData); // Tạo thẻ với dữ liệu
-                rowSizer.add(cardContainer);     // Thêm thẻ vào hàng
+            // === THÊM CARDS VÀO HÀNG NÀY ===
+            const startIndex = row * cardsPerRow;
+            const endIndex = Math.min(startIndex + cardsPerRow, cardsToShow.length);
+            
+            for (let col = 0; col < cardsPerRow; col++) {
+                let cardIndex = startIndex + col;
+                
+                // Luôn tạo card, nhưng ẩn nếu không có dữ liệu
+                if (cardIndex < cardsToShow.length) {
+                    let cardData = cardsToShow[cardIndex];
+                    let cardContainer = this.createCard(cardIndex + 1, cardData);
+                    rowSizer.add(cardContainer);
+                } else {
+                    // Tạo card trống và ẩn đi
+                    let emptyContainer = this.createCard(cardIndex + 1, null);
+                    emptyContainer.setVisible(false); // Ẩn card trống
+                    rowSizer.add(emptyContainer);
+                }
             }
 
             // Thêm hàng vào panel chính
@@ -180,21 +206,61 @@ export default class LibraryScene extends Phaser.Scene {
     getAllCardsFromData() {
         const allCards = [];
         
+        
         // Duyệt qua tất cả các loại card trong libraryCardsData
         Object.keys(libraryCardsData).forEach(cardType => {
             const cardsOfType = libraryCardsData[cardType];
-            cardsOfType.forEach(card => {
-                allCards.push({
-                    ...card,
-                    cardType: cardType // Thêm loại card vào dữ liệu
+            
+            // Xử lý đặc biệt cho coin - tạo 7 coin cho 7 nguyên tố
+            if (cardType === 'coin' && cardsOfType.length > 0) {
+                const coinData = cardsOfType[0]; // Lấy dữ liệu coin đầu tiên
+                
+                // Kiểm tra nếu coin có cấu trúc đặc biệt với name/id/description là object
+                if (coinData.name && typeof coinData.name === 'object' && !Array.isArray(coinData.name)) {
+                    const elements = Object.keys(coinData.name);
+                    
+                    // Tạo 7 coin riêng biệt cho từng nguyên tố
+                    elements.forEach((element, index) => {
+                        
+                        const coinElement = {
+                            type: coinData.type,
+                            rarity: coinData.rarity,
+                            name: coinData.name[element],
+                            id: coinData.id[element],
+                            description: coinData.description[element],
+                            element: element,
+                            className: coinData.className,
+                            cardType: cardType
+                        };
+                        allCards.push(coinElement);
+                    });
+                } else {
+                    // Coin thông thường (fallback)
+                    cardsOfType.forEach(card => {
+                        allCards.push({
+                            ...card,
+                            cardType: cardType
+                        });
+                    });
+                }
+            } else {
+                // Các loại card khác xử lý bình thường
+                cardsOfType.forEach(card => {
+                    allCards.push({
+                        ...card,
+                        cardType: cardType // Thêm loại card vào dữ liệu
+                    });
                 });
-            });
+            }
         });
+        
+        
         
         return allCards;
     }
 
     createCard(cardIndex, cardData, width = 160, height = 274.3) {
+        
         // === NỀN THẺ ===
         let background = this.rexUI.add.roundRectangle({
             x: 0, y: 0,                          // Vị trí (0,0) - sẽ được đặt bởi container
@@ -254,8 +320,9 @@ export default class LibraryScene extends Phaser.Scene {
         // === TÊN THẺ ===
         let cardName = cardData ? cardData.name : `Card ${cardIndex}`;
         let text = this.add.text(0, height * 0.35, cardName, {  // Vị trí text (dưới giữa thẻ)
-            fontSize: Math.max(8, width * 0.15), // Kích thước chữ scale theo width
+            fontSize: Math.max(8, width * 0.12), // Kích thước chữ scale theo width
             fill: '#ffffff',                     // Màu chữ trắng
+            wordWrap: { width: 175 },
             fontFamily: 'Arial',                 // Font chữ
             stroke: '#000000',                   // Màu viền chữ (đen)
             strokeThickness: Math.max(1, width * 0.02) // Độ dày viền chữ scale theo width

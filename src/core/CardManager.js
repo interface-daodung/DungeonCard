@@ -109,6 +109,10 @@ export default class CardManager {
                 this.addCard(card, i);
             }
         }
+        this.checkElementResonance();
+        // Kiểm tra Element Resonance sau khi di chuyển card
+        this.scene.gameManager.emitter
+        .on('completeMove', this.checkElementResonance.bind(this), 2);
     }
 
     /**
@@ -231,4 +235,83 @@ export default class CardManager {
             return -1;
         }
     }
+
+    /**
+     * Kiểm tra Element Resonance trên lưới 3x3
+     * Tìm các hàng hoặc cột có TOÀN BỘ 3 thẻ coin cùng id với đuôi "fragment"
+     * Gọi hàm Resonance() cho các thẻ này, mỗi thẻ chỉ được gọi 1 lần
+     */
+    checkElementResonance() {
+        const cardsToResonate = new Set(); // Lưu các card cần gọi Resonance()
+        
+        // BƯỚC 1: Kiểm tra tất cả hàng và cột để tìm các card cần xử lý
+        // Kiểm tra các hàng (0-2)
+        for (let row = 0; row < 3; row++) {
+            const rowCards = [];
+            
+            // Lấy các card trong hàng
+            for (let col = 0; col < 3; col++) {
+                const index = row * 3 + col;
+                const card = this.cards[index];
+                
+                if (card && card.type === 'coin' && card.nameId && card.nameId.endsWith('fragment')) {
+                    rowCards.push(card);
+                }
+            }
+            
+            // Kiểm tra xem có đúng 3 card cùng nameId trong hàng không
+            if (rowCards.length === 3) {
+                const firstCardNameId = rowCards[0].nameId;
+                const allSameNameId = rowCards.every(card => card.nameId === firstCardNameId);
+                
+                if (allSameNameId) {
+                    // Thêm các card vào danh sách cần xử lý
+                    rowCards.forEach(card => {
+                        cardsToResonate.add(card);
+                    });
+                    console.log(`✓ Element Resonance: Row ${row} with nameId ${firstCardNameId} triggered`);
+                }
+            }
+        }
+        
+        // Kiểm tra các cột (0-2)
+        for (let col = 0; col < 3; col++) {
+            const colCards = [];
+            
+            // Lấy các card trong cột
+            for (let row = 0; row < 3; row++) {
+                const index = row * 3 + col;
+                const card = this.cards[index];
+                
+                if (card && card.type === 'coin' && card.nameId && card.nameId.endsWith('fragment')) {
+                    colCards.push(card);
+                }
+            }
+            
+            // Kiểm tra xem có đúng 3 card cùng nameId trong cột không
+            if (colCards.length === 3) {
+                const firstCardNameId = colCards[0].nameId;
+                const allSameNameId = colCards.every(card => card.nameId === firstCardNameId);
+                
+                if (allSameNameId) {
+                    // Thêm các card vào danh sách cần xử lý
+                    colCards.forEach(card => {
+                        cardsToResonate.add(card);
+                    });
+                    console.log(`✓ Element Resonance: Column ${col} with nameId ${firstCardNameId} triggered`);
+                }
+            }
+        }
+        
+        // BƯỚC 2: Gọi Resonance() cho tất cả card đã được xác định
+        if (cardsToResonate.size > 0) {
+            console.log(`Element Resonance: ${cardsToResonate.size} cards triggered`);
+            cardsToResonate.forEach(card => {
+                card.resonance();
+            });
+        }
+        
+        return cardsToResonate.size; // Trả về số lượng card đã được xử lý
+    }
+    
 }
